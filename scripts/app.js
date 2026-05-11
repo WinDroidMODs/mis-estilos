@@ -36,13 +36,14 @@
     }
   });
 
-  // Header sticky y boton volver arriba
+  // Header sticky y boton volver arriba (aparece al 50% del scroll)
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
   window.addEventListener('scroll', function() {
     if (window.scrollY > 80) header.classList.add('scrolled');
     else header.classList.remove('scrolled');
-    if (window.scrollY > 400) backToTop.classList.add('show');
+    var mitadPagina = document.documentElement.scrollHeight * 0.5;
+    if (window.scrollY > mitadPagina) backToTop.classList.add('show');
     else backToTop.classList.remove('show');
   });
 
