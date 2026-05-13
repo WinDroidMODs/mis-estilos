@@ -36,7 +36,7 @@
     }
   });
 
-  // Header sticky y boton volver arriba
+  // Header sticky y boton volver arriba (aparece al 70% del scroll)
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
   window.addEventListener('scroll', function() {
