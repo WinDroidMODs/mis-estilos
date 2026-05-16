@@ -15,7 +15,7 @@
     });
   }
 
-  // Menu móvil
+  // Menú móvil
   var navMenu = document.getElementById('navMenu');
   var toggleBtn = document.querySelector('.nav__toggle');
   if (toggleBtn && navMenu) {
