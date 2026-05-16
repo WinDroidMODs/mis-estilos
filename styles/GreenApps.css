@@ -1,6 +1,7 @@
 /* ============================================================
    GreenApps.css v4.12 - Estilos completos
-   Incluye mejoras: botón back-to-top elegante y botones cookie en píldora
+   Incluye: botón scroll elegante, botones cookie en píldora,
+   y hover del menú móvil también en píldora.
    ============================================================ */
 
 /* TARJETAS */
@@ -569,7 +570,7 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* BOTÓN VOLVER ARRIBA (ELEGANTE) */
+/* BOTÓN VOLVER ARRIBA (ELEGANTE) - visible al 50% */
 #back-to-top {
   position: fixed;
   bottom: 30px;
@@ -653,7 +654,7 @@
 }
 .cookie-banner__btn {
   padding: 0.6rem 1.6rem;
-  border-radius: 50px;
+  border-radius: 50px;    /* <-- ESTILO PÍLDORA */
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -704,6 +705,28 @@
   }
 }
 
+/* MENÚ MÓVIL - HOVER CON ESTILO PÍLDORA */
+@media (max-width: 768px) {
+  .nav__menu a {
+    transition: background 0.2s, color 0.2s, border-radius 0.2s;
+    border-radius: 40px !important;  /* Píldora */
+  }
+  .nav__menu a:hover,
+  .nav__menu a.active {
+    background: rgba(56, 142, 60, 0.35);
+    border-radius: 40px !important;
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
+  }
+  .nav__menu .dropdown__menu a {
+    border-radius: 40px !important;
+  }
+  .nav__menu .dropdown__menu a:hover {
+    border-radius: 40px !important;
+    background: rgba(56, 142, 60, 0.3);
+  }
+}
+
 /* UTILIDADES */
 .text-center { text-align: center; }
 .mt-1 { margin-top: 1rem; }
@@ -720,7 +743,7 @@
   border: 0;
 }
 
-/* MEDIA QUERIES PARA SECCIONES NO CRITICAS */
+/* MEDIA QUERIES GENERALES */
 @media (max-width: 768px) {
   .article { padding: 1.2rem; }
   .article__title { font-size: 1.5rem; }
