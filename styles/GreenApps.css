@@ -1,7 +1,7 @@
 /* ============================================================
    GreenApps.css v4.12 - Estilos completos
    Incluye: botón scroll elegante, botones cookie en píldora,
-   y hover del menú móvil también en píldora.
+   y hover/active del menú móvil también en píldora.
    ============================================================ */
 
 /* TARJETAS */
@@ -705,13 +705,15 @@
   }
 }
 
-/* MENÚ MÓVIL - HOVER CON ESTILO PÍLDORA */
+/* MENÚ MÓVIL - HOVER/ACTIVE CON ESTILO PÍLDORA */
 @media (max-width: 768px) {
   .nav__menu a {
     transition: background 0.2s, color 0.2s, border-radius 0.2s;
-    border-radius: 40px !important;  /* Píldora */
+    border-radius: 40px !important;
   }
   .nav__menu a:hover,
+  .nav__menu a:active,
+  .nav__menu a:focus,
   .nav__menu a.active {
     background: rgba(56, 142, 60, 0.35);
     border-radius: 40px !important;
@@ -721,7 +723,9 @@
   .nav__menu .dropdown__menu a {
     border-radius: 40px !important;
   }
-  .nav__menu .dropdown__menu a:hover {
+  .nav__menu .dropdown__menu a:hover,
+  .nav__menu .dropdown__menu a:active,
+  .nav__menu .dropdown__menu a:focus {
     border-radius: 40px !important;
     background: rgba(56, 142, 60, 0.3);
   }
