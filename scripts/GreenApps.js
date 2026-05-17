@@ -42,7 +42,7 @@
     }
   });
 
-  // Clic dentro del área vacía del menú: cerrar submenús pero no el menú principal
+  // Clic dentro del área vacía del menú (fondo) -> cerrar submenús pero no el menú principal
   if (navMenu) {
     navMenu.addEventListener('click', function(e) {
       if (e.target === navMenu || e.target.parentNode === navMenu || e.target.classList.contains('nav__menu')) {
@@ -52,35 +52,33 @@
     });
   }
 
-  // Lógica para submenús en móvil: abrir/cerrar, solo uno abierto a la vez
-  if (navMenu) {
+  // Lógica para submenús en móvil: solo uno abierto a la vez, al tocar el mismo se cierra
+  if (navMenu && window.innerWidth <= 768) {
     var dropdowns = navMenu.querySelectorAll('.dropdown');
     dropdowns.forEach(function(dropdown) {
       var link = dropdown.querySelector('> a:first-child');
       if (!link) return;
 
       link.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768) {
-          e.preventDefault();
-          e.stopPropagation();
+        e.preventDefault();
+        e.stopPropagation();
 
-          var isOpen = dropdown.classList.contains('open');
+        var isOpen = dropdown.classList.contains('open');
 
-          // Cerrar todos los demás submenús
-          dropdowns.forEach(function(dd) {
-            dd.classList.remove('open');
-          });
+        // Cerrar todos los submenús
+        dropdowns.forEach(function(dd) {
+          dd.classList.remove('open');
+        });
 
-          // Si no estaba abierto, lo abrimos; si estaba abierto, lo dejamos cerrado
-          if (!isOpen) {
-            dropdown.classList.add('open');
-          }
+        // Si no estaba abierto, lo abrimos (si estaba abierto, se queda cerrado)
+        if (!isOpen) {
+          dropdown.classList.add('open');
         }
       });
     });
   }
 
-  // Para los enlaces normales (sin dropdown) en móvil, cerrar el menú después de la navegación
+  // Para enlaces normales (sin dropdown) en móvil: cerrar menú después de navegar
   if (navMenu) {
     navMenu.querySelectorAll('a:not(.dropdown > a:first-child)').forEach(function(link) {
       link.addEventListener('click', function(e) {
