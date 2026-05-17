@@ -1,6 +1,7 @@
 (function(){
   'use strict';
 
+  // Cookie banner
   var cookieBanner = document.getElementById('cookie-banner');
   if (cookieBanner && !localStorage.getItem('cookieConsent')) {
     cookieBanner.style.display = 'flex';
@@ -14,18 +15,22 @@
     });
   }
 
+  // Elementos del menú
   var navCheckbox = document.getElementById('nav-check');
   var navMenu = document.getElementById('navMenu');
+  var toggleBtn = document.querySelector('.nav__toggle');
 
+  // Función para cerrar todos los submenús
   function closeAllSubmenus() {
     if (navMenu) {
       var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
-      openDropdowns.forEach(function(dd) {
-        dd.classList.remove('open');
+      openDropdowns.forEach(function(dropdown) {
+        dropdown.classList.remove('open');
       });
     }
   }
 
+  // Función para cerrar el menú hamburguesa completo
   function closeMainMenu() {
     if (navCheckbox) {
       navCheckbox.checked = false;
@@ -33,28 +38,31 @@
     closeAllSubmenus();
   }
 
-  // Clic fuera del menú: cerrar todo (menú principal y submenús)
+  // Evento para manejar clics en el botón de hamburguesa (toggle)
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      // Al hacer clic en el botón, simplemente alternamos el estado del checkbox.
+      // El checkbox maneja la visibilidad del menú a través de CSS.
+      // No añadimos lógica extra para que el label funcione de forma nativa.
+    });
+  }
+
+  // Evento para cerrar el menú cuando se hace clic fuera de él
   document.addEventListener('click', function(event) {
+    // Si el menú está abierto
     if (navCheckbox && navCheckbox.checked) {
+      // Verificar si el clic fue dentro del menú o en el botón de toggle
       var isClickInsideMenu = navMenu && navMenu.contains(event.target);
-      var isClickOnToggle = event.target.closest('.nav__toggle');
+      var isClickOnToggle = toggleBtn && toggleBtn.contains(event.target);
+      
       if (!isClickInsideMenu && !isClickOnToggle) {
         closeMainMenu();
       }
     }
   });
 
-  // Clic dentro del área vacía del menú (fondo) solo cierra submenús, no el menú principal
-  if (navMenu) {
-    navMenu.addEventListener('click', function(e) {
-      if (e.target === navMenu || e.target.parentNode === navMenu || e.target.classList.contains('nav__menu')) {
-        closeAllSubmenus();
-        e.stopPropagation();
-      }
-    });
-  }
-
-  // Lógica para submenús en móvil: tocar en el padre abre/cierra, y solo uno abierto a la vez
+  // Manejo de submenús en vista móvil: toggle y cierre de otros
   if (navMenu) {
     var dropdowns = navMenu.querySelectorAll('.dropdown');
     dropdowns.forEach(function(dropdown) {
@@ -68,12 +76,12 @@
 
           var isOpen = dropdown.classList.contains('open');
 
-          // Primero cerrar todos los submenús
+          // Primero cerramos todos los submenús
           dropdowns.forEach(function(dd) {
             dd.classList.remove('open');
           });
 
-          // Si este no estaba abierto, lo abrimos; si ya estaba abierto, lo dejamos cerrado
+          // Si no estaba abierto, lo abrimos
           if (!isOpen) {
             dropdown.classList.add('open');
           }
@@ -82,7 +90,7 @@
     });
   }
 
-  // Para los enlaces normales (sin dropdown) en móvil, cerrar el menú después de la navegación
+  // Para enlaces normales (sin dropdown), cerramos el menú al navegar
   if (navMenu) {
     navMenu.querySelectorAll('a:not(.dropdown > a:first-child)').forEach(function(link) {
       link.addEventListener('click', function(e) {
@@ -95,14 +103,19 @@
     });
   }
 
+  // Header sticky
   var header = document.getElementById('header');
   if (header) {
     window.addEventListener('scroll', function() {
-      if (window.scrollY > 80) header.classList.add('scrolled');
-      else header.classList.remove('scrolled');
+      if (window.scrollY > 80) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
     });
   }
 
+  // Botón volver arriba (visible al 50%)
   var backToTop = document.getElementById('back-to-top');
   if (backToTop) {
     window.addEventListener('scroll', function() {
@@ -120,6 +133,7 @@
     });
   }
 
+  // Función para responder a comentarios
   window.replyToComment = function(button) {
     var commentId = button.getAttribute('data-comment-id');
     var author = button.getAttribute('data-comment-author');
@@ -134,6 +148,8 @@
       editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
+
+  // Función para cancelar respuesta a comentario
   window.cancelReply = function() {
     var notice = document.getElementById('reply-notice');
     var editor = document.getElementById('comment-editor');
