@@ -20,9 +20,8 @@
   var navMenu = document.getElementById('navMenu');
   var toggleBtn = document.querySelector('.nav__toggle');
 
-  // Función para cerrar el menú hamburguesa y todos los submenús
-  function closeAllMenus() {
-    if (navCheckbox) navCheckbox.checked = false;
+  // Función para cerrar TODOS los submenús (dropdowns abiertos)
+  function closeAllSubmenus() {
     if (navMenu) {
       var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
       openDropdowns.forEach(function(dd) {
@@ -31,41 +30,51 @@
     }
   }
 
-  // Abrir/cerrar menú al hacer clic en el toggle
+  // Función para cerrar el menú hamburguesa completo (checkbox y submenús)
+  function closeMainMenu() {
+    if (navCheckbox) navCheckbox.checked = false;
+    closeAllSubmenus();
+  }
+
+  // Abrir/cerrar menú al hacer clic en el botón hamburguesa
   if (toggleBtn && navCheckbox) {
     toggleBtn.addEventListener('click', function(e) {
       e.stopPropagation();
+      // Invertir estado del checkbox
       navCheckbox.checked = !navCheckbox.checked;
+      // Si estamos cerrando el menú, también cerramos submenús
       if (!navCheckbox.checked) {
-        if (navMenu) {
-          var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
-          openDropdowns.forEach(function(dd) {
-            dd.classList.remove('open');
-          });
-        }
+        closeAllSubmenus();
       }
     });
   }
 
-  // Cerrar menú al hacer clic fuera de él
+  // Clic fuera del menú (en cualquier parte de la página): cerrar menú principal y submenús
   document.addEventListener('click', function(event) {
+    // Si el menú está abierto
     if (navCheckbox && navCheckbox.checked) {
       var isClickInsideMenu = navMenu && navMenu.contains(event.target);
       var isClickOnToggle = toggleBtn && toggleBtn.contains(event.target);
+      // Si el clic no es dentro del menú ni en el botón
       if (!isClickInsideMenu && !isClickOnToggle) {
-        closeAllMenus();
+        closeMainMenu();
       }
     }
   });
 
-  // Evitar propagación dentro del menú
+  // Clic dentro del menú pero en el fondo vacío (no en un botón o enlace)
   if (navMenu) {
     navMenu.addEventListener('click', function(e) {
-      e.stopPropagation();
+      // Si el objetivo del clic es el propio contenedor del menú o un espacio vacío (sin enlace)
+      if (e.target === navMenu || e.target.parentNode === navMenu || e.target.classList.contains('nav__menu')) {
+        // Solo cerramos los submenús, no cerramos el menú principal
+        closeAllSubmenus();
+        e.stopPropagation();
+      }
     });
   }
 
-  // Dropdowns en móvil
+  // Para los enlaces de los dropdowns en móvil: abrir/cerrar submenú sin cerrar el menú principal
   if (navMenu) {
     navMenu.querySelectorAll('.dropdown > a:first-child').forEach(function(link) {
       link.addEventListener('click', function(e) {
@@ -74,8 +83,22 @@
           e.stopPropagation();
           var parentDropdown = this.closest('.dropdown');
           if (parentDropdown) {
+            // Alternar la clase open
             parentDropdown.classList.toggle('open');
           }
+        }
+      });
+    });
+  }
+
+  // Para los enlaces normales (no dropdown) en móvil, cerrar el menú después de navegar
+  if (navMenu) {
+    navMenu.querySelectorAll('a:not(.dropdown > a:first-child)').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        if (navCheckbox && navCheckbox.checked && window.innerWidth <= 768) {
+          setTimeout(function() {
+            closeMainMenu();
+          }, 150);
         }
       });
     });
@@ -90,7 +113,7 @@
     });
   }
 
-  // Botón volver arriba
+  // Botón volver arriba (50% scroll)
   var backToTop = document.getElementById('back-to-top');
   if (backToTop) {
     window.addEventListener('scroll', function() {
@@ -103,7 +126,6 @@
         backToTop.classList.remove('show');
       }
     });
-
     backToTop.addEventListener('click', function(){
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -117,7 +139,6 @@
     var authorSpan = document.getElementById('reply-author-name');
     var editor = document.getElementById('comment-editor');
     var formSrc = document.getElementById('comment-editor-src').href;
-
     if (notice && authorSpan && editor && formSrc) {
       authorSpan.textContent = 'Respondiendo a ' + author;
       notice.classList.add('show');
@@ -125,12 +146,10 @@
       editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
-
   window.cancelReply = function() {
     var notice = document.getElementById('reply-notice');
     var editor = document.getElementById('comment-editor');
     var formSrc = document.getElementById('comment-editor-src').href;
-
     if (notice && editor && formSrc) {
       notice.classList.remove('show');
       editor.src = formSrc;
