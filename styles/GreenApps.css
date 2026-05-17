@@ -1,6 +1,6 @@
 /* ============================================================
-   GreenApps.css v4.12 - Efecto hover desde el centro hacia los lados
-   Barra sticky más gruesa, botones píldora, menú móvil con cierre al tocar fuera
+   GreenApps.css v4.12 - Efecto centro-lados en menú principal,
+   submenús clásicos, botón scroll elegante, cookies píldora
    ============================================================ */
 
 /* TARJETAS */
@@ -704,50 +704,20 @@
   }
 }
 
-/* MENÚ PRINCIPAL - EFECTO HOVER DESDE EL CENTRO HACIA LOS LADOS */
-/* Estos estilos ya están aplicados en el XML, pero los refuerzo aquí */
-.nav__menu a,
-.nav__menu .dropdown__menu a {
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-  transition: color 0.3s;
-}
-.nav__menu a::before,
-.nav__menu .dropdown__menu a::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--accent);
-  border-radius: 40px;
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-  z-index: -1;
-}
-.nav__menu a:hover::before,
-.nav__menu a.active::before,
-.nav__menu .dropdown__menu a:hover::before {
-  transform: scaleX(1);
-}
-.nav__menu a:hover,
-.nav__menu a.active,
-.nav__menu .dropdown__menu a:hover {
-  color: #fff;
-}
-
-/* Ajustes para móvil */
+/* MENÚ MÓVIL - ESTILOS ADICIONALES (la base ya está en el XML) */
 @media (max-width: 768px) {
   .nav__menu a {
     justify-content: center;
     text-align: center;
   }
-  .nav__menu a:active::before,
-  .nav__menu a.active::before {
-    transform: scaleX(1);
+  .nav__menu a:active,
+  .nav__menu a.active {
+    background: var(--accent);
+    color: #fff;
+  }
+  .nav__menu .dropdown__menu a:active {
+    background: var(--accent);
+    color: #fff;
   }
 }
 
