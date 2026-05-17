@@ -20,62 +20,79 @@
   var navMenu = document.getElementById('navMenu');
   var toggleBtn = document.querySelector('.nav__toggle');
 
-  function closeAllSubmenus() {
-    if (!navMenu) return;
-    navMenu.querySelectorAll('.dropdown.open').forEach(function(dd){
-      dd.classList.remove('open');
-    });
-  }
-
+  // Cierra el menú principal (hamburguesa) y todos los submenús
   function closeMainMenu() {
-    if (navCheckbox) {
-      navCheckbox.checked = false;
-    }
+    if (navCheckbox) navCheckbox.checked = false;
     closeAllSubmenus();
   }
 
-  // Cierre al hacer clic fuera del menú
+  // Cierra cualquier submenú abierto
+  function closeAllSubmenus() {
+    if (!navMenu) return;
+    var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
+    openDropdowns.forEach(function(dropdown) {
+      dropdown.classList.remove('open');
+    });
+  }
+
+  // Cierre del menú al hacer clic fuera de él (funciona como la X)
   document.addEventListener('click', function(event) {
-    if (!navCheckbox || !navCheckbox.checked) return;
-    var clickedInsideMenu = navMenu && navMenu.contains(event.target);
-    var clickedOnToggle = toggleBtn && toggleBtn.contains(event.target);
+    if (!navCheckbox || !navCheckbox.checked) return;       // menú cerrado -> nada que hacer
+    if (!navMenu || !toggleBtn) return;
+
+    var clickedInsideMenu = navMenu.contains(event.target);
+    var clickedOnToggle = toggleBtn.contains(event.target);
+
     if (!clickedInsideMenu && !clickedOnToggle) {
       closeMainMenu();
     }
   });
 
-  // Toggle de submenús (válido para móvil y escritorio)
+  // También cerrar con tecla Escape para mejor accesibilidad
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && navCheckbox && navCheckbox.checked) {
+      closeMainMenu();
+    }
+  });
+
+  // ---------- SUBMENÚS (toggle real en móvil) ----------
   if (navMenu) {
     var dropdowns = navMenu.querySelectorAll('.dropdown');
-    dropdowns.forEach(function(dropdown){
-      var link = dropdown.querySelector(':scope > a:first-child');
-      if (!link) return;
-      link.addEventListener('click', function(e){
-        // En móvil (<=768px) manejamos el toggle
-        if (window.innerWidth <= 768) {
-          e.preventDefault(); // evita navegación del enlace padre
-          e.stopPropagation();
-          var isOpen = dropdown.classList.contains('open');
-          // Cierra todos los submenús
-          closeAllSubmenus();
-          // Si no estaba abierto, lo abre
-          if (!isOpen) {
-            dropdown.classList.add('open');
-          }
+
+    dropdowns.forEach(function(dropdown) {
+      var toggleLink = dropdown.querySelector(':scope > a:first-child');
+      if (!toggleLink) return;
+
+      toggleLink.addEventListener('click', function(e) {
+        if (window.innerWidth > 768) return; // en escritorio el hover se encarga
+
+        e.preventDefault();      // evita navegación
+        e.stopPropagation();     // evita que el clic cierre el menú principal inmediatamente
+
+        var isCurrentlyOpen = dropdown.classList.contains('open');
+
+        // Cierra cualquier otro submenú abierto
+        dropdowns.forEach(function(dd) {
+          if (dd !== dropdown) dd.classList.remove('open');
+        });
+
+        // Alterna el estado del submenú actual
+        if (isCurrentlyOpen) {
+          dropdown.classList.remove('open');
+        } else {
+          dropdown.classList.add('open');
         }
-        // En escritorio el comportamiento hover se mantiene por CSS
       });
     });
+  }
 
-    // Cierra el menú al hacer clic en cualquier enlace del menú (excepto dropdowns padres en móvil)
-    navMenu.querySelectorAll('a').forEach(function(link){
-      link.addEventListener('click', function(e){
-        // Si es un enlace de submenú (dentro de .dropdown__menu) o un enlace normal, cerramos el menú
-        if (window.innerWidth <= 768 && navCheckbox && navCheckbox.checked) {
-          // Evitamos interferir con el toggle del dropdown padre
-          if (!link.parentElement.classList.contains('dropdown') || link.parentElement.querySelector(':scope > a:first-child') !== link) {
-            setTimeout(closeMainMenu, 150);
-          }
+  // Cierra el menú completo al pulsar un enlace normal (sin submenú) dentro del menú
+  if (navMenu) {
+    navMenu.querySelectorAll('a:not(.dropdown > a:first-child)').forEach(function(link) {
+      link.addEventListener('click', function() {
+        if (navCheckbox && navCheckbox.checked && window.innerWidth <= 768) {
+          // Pequeño retardo para que se vea la transición antes de cerrar
+          setTimeout(closeMainMenu, 150);
         }
       });
     });
@@ -84,7 +101,7 @@
   // ---------- HEADER STICKY ----------
   var header = document.getElementById('header');
   if (header) {
-    window.addEventListener('scroll', function(){
+    window.addEventListener('scroll', function() {
       header.classList.toggle('scrolled', window.scrollY > 80);
     });
   }
@@ -92,11 +109,10 @@
   // ---------- BOTÓN VOLVER ARRIBA ----------
   var backToTop = document.getElementById('back-to-top');
   if (backToTop) {
-    window.addEventListener('scroll', function(){
+    window.addEventListener('scroll', function() {
       var totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      var scrolled = window.scrollY;
-      var percent = totalHeight > 0 ? (scrolled / totalHeight) * 100 : 0;
-      backToTop.classList.toggle('show', percent >= 50);
+      var percentScrolled = (window.scrollY / totalHeight) * 100;
+      backToTop.classList.toggle('show', percentScrolled >= 50);
     });
     backToTop.addEventListener('click', function(){
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -111,6 +127,7 @@
     var authorSpan = document.getElementById('reply-author-name');
     var editor = document.getElementById('comment-editor');
     var formSrc = document.getElementById('comment-editor-src').href;
+
     if (notice && authorSpan && editor && formSrc) {
       authorSpan.textContent = 'Respondiendo a ' + author;
       notice.classList.add('show');
@@ -123,6 +140,7 @@
     var notice = document.getElementById('reply-notice');
     var editor = document.getElementById('comment-editor');
     var formSrc = document.getElementById('comment-editor-src').href;
+
     if (notice && editor && formSrc) {
       notice.classList.remove('show');
       editor.src = formSrc;
