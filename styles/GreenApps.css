@@ -1,7 +1,6 @@
 /* ============================================================
-   GreenApps.css v4.12 - Estilos completos
-   Incluye: botón scroll elegante, botones cookie en píldora,
-   y hover/active del menú móvil también en píldora.
+   GreenApps.css v4.12 - Efecto hover desde el centro hacia los lados
+   Barra sticky más gruesa, botones píldora, menú móvil con cierre al tocar fuera
    ============================================================ */
 
 /* TARJETAS */
@@ -654,7 +653,7 @@
 }
 .cookie-banner__btn {
   padding: 0.6rem 1.6rem;
-  border-radius: 50px;    /* <-- ESTILO PÍLDORA */
+  border-radius: 50px;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -705,29 +704,50 @@
   }
 }
 
-/* MENÚ MÓVIL - HOVER/ACTIVE CON ESTILO PÍLDORA */
+/* MENÚ PRINCIPAL - EFECTO HOVER DESDE EL CENTRO HACIA LOS LADOS */
+/* Estos estilos ya están aplicados en el XML, pero los refuerzo aquí */
+.nav__menu a,
+.nav__menu .dropdown__menu a {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  transition: color 0.3s;
+}
+.nav__menu a::before,
+.nav__menu .dropdown__menu a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 40px;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  z-index: -1;
+}
+.nav__menu a:hover::before,
+.nav__menu a.active::before,
+.nav__menu .dropdown__menu a:hover::before {
+  transform: scaleX(1);
+}
+.nav__menu a:hover,
+.nav__menu a.active,
+.nav__menu .dropdown__menu a:hover {
+  color: #fff;
+}
+
+/* Ajustes para móvil */
 @media (max-width: 768px) {
   .nav__menu a {
-    transition: background 0.2s, color 0.2s, border-radius 0.2s;
-    border-radius: 40px !important;
+    justify-content: center;
+    text-align: center;
   }
-  .nav__menu a:hover,
-  .nav__menu a:active,
-  .nav__menu a:focus,
-  .nav__menu a.active {
-    background: rgba(56, 142, 60, 0.35);
-    border-radius: 40px !important;
-    padding-left: 1.1rem;
-    padding-right: 1.1rem;
-  }
-  .nav__menu .dropdown__menu a {
-    border-radius: 40px !important;
-  }
-  .nav__menu .dropdown__menu a:hover,
-  .nav__menu .dropdown__menu a:active,
-  .nav__menu .dropdown__menu a:focus {
-    border-radius: 40px !important;
-    background: rgba(56, 142, 60, 0.3);
+  .nav__menu a:active::before,
+  .nav__menu a.active::before {
+    transform: scaleX(1);
   }
 }
 
