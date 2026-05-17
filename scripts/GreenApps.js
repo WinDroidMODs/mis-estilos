@@ -18,7 +18,7 @@
   // Elementos del menú
   var navCheckbox = document.getElementById('nav-check');
   var navMenu = document.getElementById('navMenu');
-  // Nota: No usamos el toggleBtn para cerrar, solo el checkbox controla la apertura/cierre.
+  var toggleBtn = document.querySelector('.nav__toggle');
 
   // Función para cerrar todos los submenús
   function closeAllSubmenus() {
@@ -30,7 +30,39 @@
     }
   }
 
-  // Manejo de submenús en vista móvil: toggle (abre/cierra) y cierra otros
+  // Función para cerrar el menú hamburguesa completo
+  function closeMainMenu() {
+    if (navCheckbox) {
+      navCheckbox.checked = false;
+    }
+    closeAllSubmenus();
+  }
+
+  // Evento para manejar clics en el botón de hamburguesa (toggle)
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      // Al hacer clic en el botón, simplemente alternamos el estado del checkbox.
+      // El checkbox maneja la visibilidad del menú a través de CSS.
+      // No añadimos lógica extra para que el label funcione de forma nativa.
+    });
+  }
+
+  // Evento para cerrar el menú cuando se hace clic fuera de él
+  document.addEventListener('click', function(event) {
+    // Si el menú está abierto
+    if (navCheckbox && navCheckbox.checked) {
+      // Verificar si el clic fue dentro del menú o en el botón de toggle
+      var isClickInsideMenu = navMenu && navMenu.contains(event.target);
+      var isClickOnToggle = toggleBtn && toggleBtn.contains(event.target);
+      
+      if (!isClickInsideMenu && !isClickOnToggle) {
+        closeMainMenu();
+      }
+    }
+  });
+
+  // Manejo de submenús en vista móvil: toggle y cierre de otros
   if (navMenu) {
     var dropdowns = navMenu.querySelectorAll('.dropdown');
     dropdowns.forEach(function(dropdown) {
@@ -44,17 +76,13 @@
 
           var isOpen = dropdown.classList.contains('open');
 
-          // Cerrar todos los demás submenús
+          // Primero cerramos todos los submenús
           dropdowns.forEach(function(dd) {
-            if (dd !== dropdown) {
-              dd.classList.remove('open');
-            }
+            dd.classList.remove('open');
           });
 
-          // Si estaba abierto, lo cerramos; si no, lo abrimos
-          if (isOpen) {
-            dropdown.classList.remove('open');
-          } else {
+          // Si no estaba abierto, lo abrimos
+          if (!isOpen) {
             dropdown.classList.add('open');
           }
         }
@@ -62,9 +90,18 @@
     });
   }
 
-  // Para enlaces normales (sin dropdown) en móvil, simplemente navegamos sin cerrar el menú
-  // No cerramos el menú al hacer clic en enlaces, para que el usuario pueda navegar y luego cerrar manualmente.
-  // Si se desea cerrar después de navegar, se puede descomentar la siguiente sección, pero según petición no se debe cerrar automáticamente.
+  // Para enlaces normales (sin dropdown), cerramos el menú al navegar
+  if (navMenu) {
+    navMenu.querySelectorAll('a:not(.dropdown > a:first-child)').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        if (navCheckbox && navCheckbox.checked && window.innerWidth <= 768) {
+          setTimeout(function() {
+            closeMainMenu();
+          }, 150);
+        }
+      });
+    });
+  }
 
   // Header sticky
   var header = document.getElementById('header');
