@@ -69,13 +69,11 @@
           e.stopPropagation();
           var parentDropdown = this.closest('.dropdown');
           if (parentDropdown) {
-            var allDropdowns = navMenu.querySelectorAll('.dropdown');
-            allDropdowns.forEach(function(dd) {
-              if (dd !== parentDropdown && dd.classList.contains('open')) {
-                dd.classList.remove('open');
-              }
-            });
-            parentDropdown.classList.toggle('open');
+            var wasOpen = parentDropdown.classList.contains('open');
+            closeAllSubmenus();
+            if (!wasOpen) {
+              parentDropdown.classList.add('open');
+            }
           }
         }
       });
