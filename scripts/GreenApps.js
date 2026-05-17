@@ -37,7 +37,9 @@
       if (!link) return;
 
       link.addEventListener('click', function(e) {
+        // Solo actuar en móvil (ancho <= 768)
         if (window.innerWidth <= 768) {
+          // Prevenir la navegación del enlace
           e.preventDefault();
           e.stopPropagation();
 
@@ -50,7 +52,7 @@
             }
           });
 
-          // Si estaba abierto, lo cerramos; si no, lo abrimos
+          // Abrir o cerrar el actual
           if (isOpen) {
             dropdown.classList.remove('open');
           } else {
