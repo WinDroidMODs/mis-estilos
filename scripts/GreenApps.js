@@ -33,13 +33,12 @@
   if (navMenu) {
     var dropdowns = navMenu.querySelectorAll('.dropdown');
     dropdowns.forEach(function(dropdown) {
-      var link = dropdown.querySelector('> a:first-child');
-      if (!link) return;
+      var parentLink = dropdown.querySelector('> a');
+      if (!parentLink) return;
 
-      link.addEventListener('click', function(e) {
-        // Solo actuar en móvil (ancho <= 768)
+      parentLink.addEventListener('click', function(e) {
+        // En móvil, prevenir cualquier navegación y abrir/cerrar submenú
         if (window.innerWidth <= 768) {
-          // Prevenir la navegación del enlace
           e.preventDefault();
           e.stopPropagation();
 
