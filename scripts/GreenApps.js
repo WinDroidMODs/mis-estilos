@@ -18,7 +18,6 @@
   // Elementos del menú
   var navCheckbox = document.getElementById('nav-check');
   var navMenu = document.getElementById('navMenu');
-  var toggleBtn = document.querySelector('.nav__toggle');
 
   // Función para cerrar todos los submenús
   function closeAllSubmenus() {
@@ -30,39 +29,7 @@
     }
   }
 
-  // Función para cerrar el menú hamburguesa completo
-  function closeMainMenu() {
-    if (navCheckbox) {
-      navCheckbox.checked = false;
-    }
-    closeAllSubmenus();
-  }
-
-  // Evento para manejar clics en el botón de hamburguesa (toggle)
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      // Al hacer clic en el botón, simplemente alternamos el estado del checkbox.
-      // El checkbox maneja la visibilidad del menú a través de CSS.
-      // No añadimos lógica extra para que el label funcione de forma nativa.
-    });
-  }
-
-  // Evento para cerrar el menú cuando se hace clic fuera de él
-  document.addEventListener('click', function(event) {
-    // Si el menú está abierto
-    if (navCheckbox && navCheckbox.checked) {
-      // Verificar si el clic fue dentro del menú o en el botón de toggle
-      var isClickInsideMenu = navMenu && navMenu.contains(event.target);
-      var isClickOnToggle = toggleBtn && toggleBtn.contains(event.target);
-      
-      if (!isClickInsideMenu && !isClickOnToggle) {
-        closeMainMenu();
-      }
-    }
-  });
-
-  // Manejo de submenús en vista móvil: toggle y cierre de otros
+  // Manejo de submenús en vista móvil: toggle (abre/cierra) y cierra otros
   if (navMenu) {
     var dropdowns = navMenu.querySelectorAll('.dropdown');
     dropdowns.forEach(function(dropdown) {
@@ -76,28 +43,19 @@
 
           var isOpen = dropdown.classList.contains('open');
 
-          // Primero cerramos todos los submenús
+          // Cerrar todos los demás submenús
           dropdowns.forEach(function(dd) {
-            dd.classList.remove('open');
+            if (dd !== dropdown) {
+              dd.classList.remove('open');
+            }
           });
 
-          // Si no estaba abierto, lo abrimos
-          if (!isOpen) {
+          // Si estaba abierto, lo cerramos; si no, lo abrimos
+          if (isOpen) {
+            dropdown.classList.remove('open');
+          } else {
             dropdown.classList.add('open');
           }
-        }
-      });
-    });
-  }
-
-  // Para enlaces normales (sin dropdown), cerramos el menú al navegar
-  if (navMenu) {
-    navMenu.querySelectorAll('a:not(.dropdown > a:first-child)').forEach(function(link) {
-      link.addEventListener('click', function(e) {
-        if (navCheckbox && navCheckbox.checked && window.innerWidth <= 768) {
-          setTimeout(function() {
-            closeMainMenu();
-          }, 150);
         }
       });
     });
@@ -133,7 +91,7 @@
     });
   }
 
-  // Función para responder a comentarios
+  // Responder a comentarios
   window.replyToComment = function(button) {
     var commentId = button.getAttribute('data-comment-id');
     var author = button.getAttribute('data-comment-author');
@@ -148,8 +106,6 @@
       editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
-
-  // Función para cancelar respuesta a comentario
   window.cancelReply = function() {
     var notice = document.getElementById('reply-notice');
     var editor = document.getElementById('comment-editor');
