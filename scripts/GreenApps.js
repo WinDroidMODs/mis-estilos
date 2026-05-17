@@ -27,11 +27,13 @@
   }
 
   function closeMainMenu() {
-    if (navCheckbox) navCheckbox.checked = false;
+    if (navCheckbox) {
+      navCheckbox.checked = false;
+    }
     closeAllSubmenus();
   }
 
-  // Clic fuera del menú: cerrar todo
+  // Clic fuera del menú: cerrar todo (menú principal y submenús)
   document.addEventListener('click', function(event) {
     if (navCheckbox && navCheckbox.checked) {
       var isClickInsideMenu = navMenu && navMenu.contains(event.target);
@@ -42,7 +44,7 @@
     }
   });
 
-  // Clic dentro del área vacía del menú (fondo) -> cerrar submenús pero no el menú principal
+  // Clic dentro del área vacía del menú (fondo) solo cierra submenús, no el menú principal
   if (navMenu) {
     navMenu.addEventListener('click', function(e) {
       if (e.target === navMenu || e.target.parentNode === navMenu || e.target.classList.contains('nav__menu')) {
@@ -52,33 +54,35 @@
     });
   }
 
-  // Lógica para submenús en móvil: solo uno abierto a la vez, al tocar el mismo se cierra
-  if (navMenu && window.innerWidth <= 768) {
+  // Lógica para submenús en móvil: tocar en el padre abre/cierra, y solo uno abierto a la vez
+  if (navMenu) {
     var dropdowns = navMenu.querySelectorAll('.dropdown');
     dropdowns.forEach(function(dropdown) {
       var link = dropdown.querySelector('> a:first-child');
       if (!link) return;
 
       link.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          e.stopPropagation();
 
-        var isOpen = dropdown.classList.contains('open');
+          var isOpen = dropdown.classList.contains('open');
 
-        // Cerrar todos los submenús
-        dropdowns.forEach(function(dd) {
-          dd.classList.remove('open');
-        });
+          // Primero cerrar todos los submenús
+          dropdowns.forEach(function(dd) {
+            dd.classList.remove('open');
+          });
 
-        // Si no estaba abierto, lo abrimos (si estaba abierto, se queda cerrado)
-        if (!isOpen) {
-          dropdown.classList.add('open');
+          // Si este no estaba abierto, lo abrimos; si ya estaba abierto, lo dejamos cerrado
+          if (!isOpen) {
+            dropdown.classList.add('open');
+          }
         }
       });
     });
   }
 
-  // Para enlaces normales (sin dropdown) en móvil: cerrar menú después de navegar
+  // Para los enlaces normales (sin dropdown) en móvil, cerrar el menú después de la navegación
   if (navMenu) {
     navMenu.querySelectorAll('a:not(.dropdown > a:first-child)').forEach(function(link) {
       link.addEventListener('click', function(e) {
