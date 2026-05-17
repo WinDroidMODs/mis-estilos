@@ -1,53 +1,36 @@
-(function() {
+(function(){
   'use strict';
 
-  // Elementos del DOM
+  // Cookie banner
+  var cookieBanner = document.getElementById('cookie-banner');
+  if (cookieBanner && !localStorage.getItem('cookieConsent')) {
+    cookieBanner.style.display = 'flex';
+    document.getElementById('cookie-accept').addEventListener('click', function(){
+      localStorage.setItem('cookieConsent', 'accepted');
+      cookieBanner.style.display = 'none';
+    });
+    document.getElementById('cookie-reject').addEventListener('click', function(){
+      localStorage.setItem('cookieConsent', 'rejected');
+      cookieBanner.style.display = 'none';
+    });
+  }
+
+  // Elementos del menú
   var navCheckbox = document.getElementById('nav-check');
   var navMenu = document.getElementById('navMenu');
-  var toggleBtn = document.querySelector('.nav__toggle');
-  var body = document.body;
+  // Nota: No usamos el toggleBtn para cerrar, solo el checkbox controla la apertura/cierre.
 
   // Función para cerrar todos los submenús
   function closeAllSubmenus() {
-    if (!navMenu) return;
-    var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
-    openDropdowns.forEach(function(dropdown) {
-      dropdown.classList.remove('open');
-    });
-  }
-
-  // Función para cerrar el menú principal (checkbox) y submenús
-  function closeMainMenu() {
-    if (navCheckbox) navCheckbox.checked = false;
-    closeAllSubmenus();
-  }
-
-  // Clic en el botón hamburguesa: simplemente alterna el checkbox (sin lógica extra)
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', function(e) {
-      // No hacemos nada aquí, porque el label asociado al checkbox ya maneja el toggle.
-      // Solo evitamos la propagación para que el evento de documento no lo cierre inmediatamente.
-      e.stopPropagation();
-    });
-  }
-
-  // Clic fuera del menú: cerrar todo (menú principal y submenús)
-  document.addEventListener('click', function(event) {
-    // Si el menú no está abierto, salimos
-    if (!navCheckbox || !navCheckbox.checked) return;
-
-    // Elementos que consideramos "dentro del menú"
-    var isClickInsideMenu = navMenu && navMenu.contains(event.target);
-    var isClickOnToggle = toggleBtn && toggleBtn.contains(event.target);
-    var isClickOnCheckbox = event.target === navCheckbox;
-
-    // Si el clic no es dentro del menú, ni en el botón toggle, ni en el checkbox, cerramos
-    if (!isClickInsideMenu && !isClickOnToggle && !isClickOnCheckbox) {
-      closeMainMenu();
+    if (navMenu) {
+      var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
+      openDropdowns.forEach(function(dropdown) {
+        dropdown.classList.remove('open');
+      });
     }
-  });
+  }
 
-  // Manejo de submenús: toggle y cierre de otros
+  // Manejo de submenús en vista móvil: toggle (abre/cierra) y cierra otros
   if (navMenu) {
     var dropdowns = navMenu.querySelectorAll('.dropdown');
     dropdowns.forEach(function(dropdown) {
@@ -55,21 +38,23 @@
       if (!link) return;
 
       link.addEventListener('click', function(e) {
-        // Solo en móvil (pantalla pequeña)
         if (window.innerWidth <= 768) {
           e.preventDefault();
           e.stopPropagation();
 
           var isOpen = dropdown.classList.contains('open');
 
-          // Si este dropdown está abierto, lo cerramos
+          // Cerrar todos los demás submenús
+          dropdowns.forEach(function(dd) {
+            if (dd !== dropdown) {
+              dd.classList.remove('open');
+            }
+          });
+
+          // Si estaba abierto, lo cerramos; si no, lo abrimos
           if (isOpen) {
             dropdown.classList.remove('open');
           } else {
-            // Cerramos todos los demás y luego abrimos este
-            dropdowns.forEach(function(dd) {
-              dd.classList.remove('open');
-            });
             dropdown.classList.add('open');
           }
         }
@@ -77,20 +62,9 @@
     });
   }
 
-  // Para los enlaces normales (sin submenú), cerramos el menú al hacer clic (en móvil)
-  if (navMenu) {
-    var normalLinks = navMenu.querySelectorAll('a:not(.dropdown > a:first-child)');
-    normalLinks.forEach(function(link) {
-      link.addEventListener('click', function(e) {
-        if (navCheckbox && navCheckbox.checked && window.innerWidth <= 768) {
-          // Damos tiempo para que se ejecute la navegación, luego cerramos
-          setTimeout(function() {
-            closeMainMenu();
-          }, 150);
-        }
-      });
-    });
-  }
+  // Para enlaces normales (sin dropdown) en móvil, simplemente navegamos sin cerrar el menú
+  // No cerramos el menú al hacer clic en enlaces, para que el usuario pueda navegar y luego cerrar manualmente.
+  // Si se desea cerrar después de navegar, se puede descomentar la siguiente sección, pero según petición no se debe cerrar automáticamente.
 
   // Header sticky
   var header = document.getElementById('header');
@@ -104,67 +78,48 @@
     });
   }
 
-  // Botón volver arriba (visible al 50% del scroll)
+  // Botón volver arriba (visible al 50%)
   var backToTop = document.getElementById('back-to-top');
   if (backToTop) {
     window.addEventListener('scroll', function() {
       var totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       var scrolled = window.scrollY;
-      var percentScrolled = totalHeight > 0 ? (scrolled / totalHeight) * 100 : 0;
+      var percentScrolled = (scrolled / totalHeight) * 100;
       if (percentScrolled >= 50) {
         backToTop.classList.add('show');
       } else {
         backToTop.classList.remove('show');
       }
     });
-    backToTop.addEventListener('click', function() {
+    backToTop.addEventListener('click', function(){
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
-  // Cookies banner
-  var cookieBanner = document.getElementById('cookie-banner');
-  if (cookieBanner && !localStorage.getItem('cookieConsent')) {
-    cookieBanner.style.display = 'flex';
-    var acceptBtn = document.getElementById('cookie-accept');
-    var rejectBtn = document.getElementById('cookie-reject');
-    if (acceptBtn) {
-      acceptBtn.addEventListener('click', function() {
-        localStorage.setItem('cookieConsent', 'accepted');
-        cookieBanner.style.display = 'none';
-      });
-    }
-    if (rejectBtn) {
-      rejectBtn.addEventListener('click', function() {
-        localStorage.setItem('cookieConsent', 'rejected');
-        cookieBanner.style.display = 'none';
-      });
-    }
-  }
-
-  // Funciones de comentarios (si existen)
+  // Función para responder a comentarios
   window.replyToComment = function(button) {
     var commentId = button.getAttribute('data-comment-id');
     var author = button.getAttribute('data-comment-author');
     var notice = document.getElementById('reply-notice');
     var authorSpan = document.getElementById('reply-author-name');
     var editor = document.getElementById('comment-editor');
-    var formSrc = document.getElementById('comment-editor-src');
+    var formSrc = document.getElementById('comment-editor-src').href;
     if (notice && authorSpan && editor && formSrc) {
       authorSpan.textContent = 'Respondiendo a ' + author;
       notice.classList.add('show');
-      editor.src = formSrc.href + '&parentID=' + commentId;
+      editor.src = formSrc + '&parentID=' + commentId;
       editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
 
+  // Función para cancelar respuesta a comentario
   window.cancelReply = function() {
     var notice = document.getElementById('reply-notice');
     var editor = document.getElementById('comment-editor');
-    var formSrc = document.getElementById('comment-editor-src');
+    var formSrc = document.getElementById('comment-editor-src').href;
     if (notice && editor && formSrc) {
       notice.classList.remove('show');
-      editor.src = formSrc.href;
+      editor.src = formSrc;
     }
   };
 
