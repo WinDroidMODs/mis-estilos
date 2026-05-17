@@ -14,8 +14,7 @@
     });
   }
 
-  var header = document.getElementById('header');
-  var toggle = document.getElementById('menuToggle');
+  var navCheckbox = document.getElementById('nav-check');
   var navMenu = document.getElementById('navMenu');
 
   function closeAllSubmenus() {
@@ -28,24 +27,14 @@
   }
 
   function closeMainMenu() {
-    if (header) header.classList.remove('menu-open');
+    if (navCheckbox) navCheckbox.checked = false;
     closeAllSubmenus();
   }
 
-  if (toggle) {
-    toggle.addEventListener('click', function(e) {
-      e.stopPropagation();
-      header.classList.toggle('menu-open');
-      if (!header.classList.contains('menu-open')) {
-        closeAllSubmenus();
-      }
-    });
-  }
-
   document.addEventListener('click', function(event) {
-    if (header && header.classList.contains('menu-open')) {
+    if (navCheckbox && navCheckbox.checked) {
       var isClickInsideMenu = navMenu && navMenu.contains(event.target);
-      var isClickOnToggle = toggle && toggle.contains(event.target);
+      var isClickOnToggle = event.target.closest('.nav__toggle');
       if (!isClickInsideMenu && !isClickOnToggle) {
         closeMainMenu();
       }
@@ -69,11 +58,7 @@
           e.stopPropagation();
           var parentDropdown = this.closest('.dropdown');
           if (parentDropdown) {
-            var wasOpen = parentDropdown.classList.contains('open');
-            closeAllSubmenus();
-            if (!wasOpen) {
-              parentDropdown.classList.add('open');
-            }
+            parentDropdown.classList.toggle('open');
           }
         }
       });
@@ -83,7 +68,7 @@
   if (navMenu) {
     navMenu.querySelectorAll('a:not(.dropdown > a:first-child)').forEach(function(link) {
       link.addEventListener('click', function(e) {
-        if (header && header.classList.contains('menu-open') && window.innerWidth <= 768) {
+        if (navCheckbox && navCheckbox.checked && window.innerWidth <= 768) {
           setTimeout(function() {
             closeMainMenu();
           }, 150);
@@ -92,6 +77,7 @@
     });
   }
 
+  var header = document.getElementById('header');
   if (header) {
     window.addEventListener('scroll', function() {
       if (window.scrollY > 80) header.classList.add('scrolled');
