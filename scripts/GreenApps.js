@@ -1,9 +1,7 @@
 (function(){
   'use strict';
 
-  /* ==============================================
-     COOKIE BANNER
-  ============================================== */
+  // Cookie banner
   var cookieBanner = document.getElementById('cookie-banner');
   if (cookieBanner && !localStorage.getItem('cookieConsent')) {
     cookieBanner.style.display = 'flex';
@@ -17,110 +15,124 @@
     });
   }
 
-  /* ==============================================
-     MENÚ HAMBURGUESA + SUBMENÚS (nueva técnica)
-  ============================================== */
-  var navCheck = document.getElementById('nav-check');
+  var navCheckbox = document.getElementById('nav-check');
   var navMenu = document.getElementById('navMenu');
   var toggleBtn = document.querySelector('.nav__toggle');
 
-  // Cierra completamente el menú (checkbox + submenús)
-  function closeMenu() {
-    if (navCheck) navCheck.checked = false;
+  function closeAllSubmenus() {
     if (navMenu) {
-      var openSubs = navMenu.querySelectorAll('.dropdown.open');
-      for (var i = 0; i < openSubs.length; i++) {
-        openSubs[i].classList.remove('open');
-      }
+      var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
+      openDropdowns.forEach(function(dropdown) {
+        dropdown.classList.remove('open');
+      });
     }
   }
 
-  // Abre/cierra un submenú concreto y cierra los demás
-  function toggleSubmenu(dropdown) {
-    var isOpen = dropdown.classList.contains('open');
-    // Cerrar todos los submenús
-    var allSubs = navMenu.querySelectorAll('.dropdown.open');
-    for (var i = 0; i < allSubs.length; i++) {
-      allSubs[i].classList.remove('open');
+  function closeMainMenu() {
+    if (navCheckbox) {
+      navCheckbox.checked = false;
     }
-    // Si no estaba abierto, lo abrimos
-    if (!isOpen) {
-      dropdown.classList.add('open');
-    }
+    closeAllSubmenus();
   }
 
-  // Delegación de eventos en el menú (solo afecta a móvil)
-  if (navMenu) {
-    navMenu.addEventListener('click', function(e) {
-      if (window.innerWidth > 768) return; // en escritorio se usa hover
-
-      var target = e.target;
-      // Buscar si el clic fue sobre el enlace principal de un dropdown
-      var dropdownLink = target.closest('.dropdown > a:first-child');
-      if (dropdownLink) {
-        e.preventDefault();  // evitar navegación en móvil
-        e.stopPropagation(); // evitar que el click cierre el menú
-        var dropdown = dropdownLink.parentNode; // el .dropdown
-        toggleSubmenu(dropdown);
-        return;
-      }
-
-      // Si se hace clic en cualquier otro enlace (sin submenú), cerramos el menú
-      if (target.tagName === 'A' && !target.closest('.dropdown > a:first-child')) {
-        setTimeout(closeMenu, 100);
-      }
+  // Toggle del menú hamburguesa
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
     });
   }
 
-  // Cerrar menú al hacer clic FUERA de él o del botón toggle
-  document.addEventListener('click', function(e) {
-    if (!navCheck || !navCheck.checked) return; // menú cerrado
-    var clickedInsideMenu = navMenu && navMenu.contains(e.target);
-    var clickedOnToggle = toggleBtn && toggleBtn.contains(e.target);
-    if (!clickedInsideMenu && !clickedOnToggle) {
-      closeMenu();
+  // Cerrar menú al hacer clic fuera
+  document.addEventListener('click', function(event) {
+    if (navCheckbox && navCheckbox.checked) {
+      var isClickInsideMenu = navMenu && navMenu.contains(event.target);
+      var isClickOnToggle = toggleBtn && toggleBtn.contains(event.target);
+      
+      if (!isClickInsideMenu && !isClickOnToggle) {
+        closeMainMenu();
+      }
     }
   });
 
-  // Sincronizar cierre de submenús al cerrar el menú hamburguesa
-  if (navCheck) {
-    navCheck.addEventListener('change', function() {
-      if (!navCheck.checked && navMenu) {
-        var subs = navMenu.querySelectorAll('.dropdown.open');
-        for (var i = 0; i < subs.length; i++) subs[i].classList.remove('open');
+  // Manejo de submenús en móvil (toggle)
+  if (navMenu) {
+    var dropdowns = navMenu.querySelectorAll('.dropdown');
+    dropdowns.forEach(function(dropdown) {
+      var link = dropdown.querySelector(':scope > a:first-child');
+      if (!link) return;
+
+      link.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          e.stopPropagation();
+
+          var isOpen = dropdown.classList.contains('open');
+
+          // Cerramos todos los submenús
+          dropdowns.forEach(function(dd) {
+            dd.classList.remove('open');
+          });
+
+          // Si no estaba abierto, lo abrimos
+          if (!isOpen) {
+            dropdown.classList.add('open');
+          }
+        }
+      });
+    });
+  }
+
+  // Cerrar menú al hacer clic en enlaces que NO son el título de un dropdown
+  if (navMenu) {
+    navMenu.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        // Si es el enlace principal de un dropdown, NO cerramos el menú
+        var parentDropdown = link.closest('.dropdown');
+        if (parentDropdown && parentDropdown.querySelector(':scope > a:first-child') === link) {
+          return; // es el enlace principal de dropdown, lo maneja el listener anterior
+        }
+
+        // Para cualquier otro enlace (submenú o enlace normal), cerramos el menú tras navegar
+        if (navCheckbox && navCheckbox.checked && window.innerWidth <= 768) {
+          setTimeout(function() {
+            closeMainMenu();
+          }, 150);
+        }
+      });
+    });
+  }
+
+  // Header sticky
+  var header = document.getElementById('header');
+  if (header) {
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 80) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
       }
     });
   }
 
-  /* ==============================================
-     HEADER STICKY
-  ============================================== */
-  var header = document.getElementById('header');
-  if (header) {
-    window.addEventListener('scroll', function() {
-      header.classList.toggle('scrolled', window.scrollY > 80);
-    });
-  }
-
-  /* ==============================================
-     BOTÓN VOLVER ARRIBA (visible al 50% scroll)
-  ============================================== */
+  // Botón volver arriba
   var backToTop = document.getElementById('back-to-top');
   if (backToTop) {
     window.addEventListener('scroll', function() {
       var totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       var scrolled = window.scrollY;
-      var percent = totalHeight > 0 ? (scrolled / totalHeight) * 100 : 0;
-      backToTop.classList.toggle('show', percent >= 50);
+      var percentScrolled = (scrolled / totalHeight) * 100;
+      if (percentScrolled >= 50) {
+        backToTop.classList.add('show');
+      } else {
+        backToTop.classList.remove('show');
+      }
     });
-    backToTop.addEventListener('click', function() {
+    backToTop.addEventListener('click', function(){
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
-  /* ==============================================
-     RESPUESTA A COMENTARIOS
-  ============================================== */
+  // Responder a comentarios
   window.replyToComment = function(button) {
     var commentId = button.getAttribute('data-comment-id');
     var author = button.getAttribute('data-comment-author');
