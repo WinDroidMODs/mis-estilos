@@ -1,3 +1,7 @@
+
+  };
+
+})();
 (function(){
   'use strict';
 
@@ -33,7 +37,7 @@
     }
   }
 
-  // Cierre al hacer clic fuera
+  // Cierre al hacer clic fuera (solo si el menú está abierto)
   document.addEventListener('click', function(event) {
     if (!navCheckbox || !navCheckbox.checked) return;
     if (!navMenu || !toggleBtn) return;
@@ -55,7 +59,6 @@
 
     for (var i = 0; i < dropdowns.length; i++) {
       (function(dropdown) {
-        // Obtener el enlace principal (primer hijo <a>)
         var toggleLink = dropdown.children[0];
         if (!toggleLink || toggleLink.tagName !== 'A') return;
 
@@ -74,7 +77,7 @@
             }
           }
 
-          // Alternar actual
+          // Toggle actual
           if (isOpen) {
             dropdown.classList.remove('open');
           } else {
@@ -87,11 +90,16 @@
 
   // Cierra el menú al pulsar un enlace normal (sin submenú) dentro del menú
   if (navMenu) {
-    var allLinks = navMenu.querySelectorAll('a:not(.dropdown > a:first-child)');
+    // Seleccionamos solo los enlaces que no tengan dropdown directamente encima
+    var allLinks = navMenu.querySelectorAll('a');
     for (var i = 0; i < allLinks.length; i++) {
       allLinks[i].addEventListener('click', function() {
         if (navCheckbox && navCheckbox.checked && window.innerWidth <= 768) {
-          setTimeout(closeMainMenu, 150);
+          // Cerrar solo si el enlace no es un toggle de dropdown
+          var parent = this.parentNode;
+          if (!parent.classList.contains('dropdown')) {
+            setTimeout(closeMainMenu, 150);
+          }
         }
       });
     }
