@@ -69,6 +69,14 @@
           e.stopPropagation();
           var parentDropdown = this.closest('.dropdown');
           if (parentDropdown) {
+            // Cerrar cualquier otro submenú abierto
+            var allDropdowns = navMenu.querySelectorAll('.dropdown');
+            allDropdowns.forEach(function(dd) {
+              if (dd !== parentDropdown && dd.classList.contains('open')) {
+                dd.classList.remove('open');
+              }
+            });
+            // Alternar el actual
             parentDropdown.classList.toggle('open');
           }
         }
