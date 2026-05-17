@@ -705,6 +705,12 @@
     background: var(--accent);
     color: #fff;
   }
+  /* Mejora táctil para los enlaces de categoría con submenú */
+  .nav__menu .dropdown > a:first-child {
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+  }
 }
 
 .text-center { text-align: center; }
