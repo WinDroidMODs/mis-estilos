@@ -1,7 +1,6 @@
 (function(){
   'use strict';
 
-  // Cookie banner
   var cookieBanner = document.getElementById('cookie-banner');
   if (cookieBanner && !localStorage.getItem('cookieConsent')) {
     cookieBanner.style.display = 'flex';
@@ -15,66 +14,77 @@
     });
   }
 
-  // Elementos del menú
   var navCheckbox = document.getElementById('nav-check');
   var navMenu = document.getElementById('navMenu');
 
-  // Función para cerrar todos los submenús
   function closeAllSubmenus() {
     if (navMenu) {
       var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
-      openDropdowns.forEach(function(dropdown) {
-        dropdown.classList.remove('open');
+      openDropdowns.forEach(function(dd) {
+        dd.classList.remove('open');
       });
     }
   }
 
-  // Manejo de submenús en vista móvil: toggle (abre/cierra) y cierra otros
-  if (navMenu) {
-    var dropdowns = navMenu.querySelectorAll('.dropdown');
-    dropdowns.forEach(function(dropdown) {
-      var parentLink = dropdown.querySelector('> a');
-      if (!parentLink) return;
+  function closeMainMenu() {
+    if (navCheckbox) navCheckbox.checked = false;
+    closeAllSubmenus();
+  }
 
-      parentLink.addEventListener('click', function(e) {
-        // En móvil, prevenir cualquier navegación y abrir/cerrar submenú
+  document.addEventListener('click', function(event) {
+    if (navCheckbox && navCheckbox.checked) {
+      var isClickInsideMenu = navMenu && navMenu.contains(event.target);
+      var isClickOnToggle = event.target.closest('.nav__toggle');
+      if (!isClickInsideMenu && !isClickOnToggle) {
+        closeMainMenu();
+      }
+    }
+  });
+
+  if (navMenu) {
+    navMenu.addEventListener('click', function(e) {
+      if (e.target === navMenu || e.target.parentNode === navMenu || e.target.classList.contains('nav__menu')) {
+        closeAllSubmenus();
+        e.stopPropagation();
+      }
+    });
+  }
+
+  if (navMenu) {
+    navMenu.querySelectorAll('.dropdown > a:first-child').forEach(function(link) {
+      link.addEventListener('click', function(e) {
         if (window.innerWidth <= 768) {
           e.preventDefault();
           e.stopPropagation();
-
-          var isOpen = dropdown.classList.contains('open');
-
-          // Cerrar todos los demás submenús
-          dropdowns.forEach(function(dd) {
-            if (dd !== dropdown) {
-              dd.classList.remove('open');
-            }
-          });
-
-          // Abrir o cerrar el actual
-          if (isOpen) {
-            dropdown.classList.remove('open');
-          } else {
-            dropdown.classList.add('open');
+          var parentDropdown = this.closest('.dropdown');
+          if (parentDropdown) {
+            parentDropdown.classList.toggle('open');
           }
         }
       });
     });
   }
 
-  // Header sticky
-  var header = document.getElementById('header');
-  if (header) {
-    window.addEventListener('scroll', function() {
-      if (window.scrollY > 80) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
+  if (navMenu) {
+    navMenu.querySelectorAll('a:not(.dropdown > a:first-child)').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        if (navCheckbox && navCheckbox.checked && window.innerWidth <= 768) {
+          setTimeout(function() {
+            closeMainMenu();
+          }, 150);
+        }
+      });
     });
   }
 
-  // Botón volver arriba (visible al 50%)
+  var header = document.getElementById('header');
+  if (header) {
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 80) header.classList.add('scrolled');
+      else header.classList.remove('scrolled');
+    });
+  }
+
   var backToTop = document.getElementById('back-to-top');
   if (backToTop) {
     window.addEventListener('scroll', function() {
@@ -92,7 +102,6 @@
     });
   }
 
-  // Responder a comentarios
   window.replyToComment = function(button) {
     var commentId = button.getAttribute('data-comment-id');
     var author = button.getAttribute('data-comment-author');
