@@ -1,3 +1,10 @@
+/* ============================================================
+   GreenApps.css v4.12 - Estilos completos
+   Incluye: botón scroll elegante, botones cookie en píldora,
+   y hover/active del menú móvil también en píldora.
+   ============================================================ */
+
+/* TARJETAS */
 .posts-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -154,6 +161,7 @@
   }
 }
 
+/* SIDEBAR */
 .widget {
   background: #13131d;
   border: 1px solid #1e1e2e;
@@ -235,6 +243,7 @@
   color: #fff;
 }
 
+/* POST INDIVIDUAL */
 .article {
   background: #13131d;
   border: 1px solid #1e1e2e;
@@ -328,6 +337,7 @@
   color: #fff;
 }
 
+/* COMENTARIOS */
 .post-comments {
   background: #13131d;
   border: 1px solid #1e1e2e;
@@ -487,6 +497,7 @@
   color: #ef5350;
 }
 
+/* FOOTER */
 .footer {
   background: #111118;
   border-top: 1px solid #1e1e2e;
@@ -528,6 +539,7 @@
   text-decoration: underline;
 }
 
+/* PAGINACION */
 .pagination {
   display: flex;
   justify-content: center;
@@ -558,6 +570,7 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* BOTÓN VOLVER ARRIBA (ELEGANTE) - visible al 50% */
 #back-to-top {
   position: fixed;
   bottom: 30px;
@@ -595,6 +608,7 @@
   transform: translateY(1px);
 }
 
+/* AVISO DE COOKIES (BOTONES ESTILO PÍLDORA) */
 .cookie-banner {
   position: fixed;
   bottom: 0;
@@ -640,7 +654,7 @@
 }
 .cookie-banner__btn {
   padding: 0.6rem 1.6rem;
-  border-radius: 50px;
+  border-radius: 50px;    /* <-- ESTILO PÍLDORA */
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -691,22 +705,33 @@
   }
 }
 
+/* MENÚ MÓVIL - HOVER/ACTIVE CON ESTILO PÍLDORA */
 @media (max-width: 768px) {
   .nav__menu a {
-    justify-content: center;
-    text-align: center;
+    transition: background 0.2s, color 0.2s, border-radius 0.2s;
+    border-radius: 40px !important;
   }
+  .nav__menu a:hover,
   .nav__menu a:active,
+  .nav__menu a:focus,
   .nav__menu a.active {
-    background: var(--accent);
-    color: #fff;
+    background: rgba(56, 142, 60, 0.35);
+    border-radius: 40px !important;
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
   }
-  .nav__menu .dropdown__menu a:active {
-    background: var(--accent);
-    color: #fff;
+  .nav__menu .dropdown__menu a {
+    border-radius: 40px !important;
+  }
+  .nav__menu .dropdown__menu a:hover,
+  .nav__menu .dropdown__menu a:active,
+  .nav__menu .dropdown__menu a:focus {
+    border-radius: 40px !important;
+    background: rgba(56, 142, 60, 0.3);
   }
 }
 
+/* UTILIDADES */
 .text-center { text-align: center; }
 .mt-1 { margin-top: 1rem; }
 .mt-2 { margin-top: 2rem; }
@@ -722,6 +747,7 @@
   border: 0;
 }
 
+/* MEDIA QUERIES GENERALES */
 @media (max-width: 768px) {
   .article { padding: 1.2rem; }
   .article__title { font-size: 1.5rem; }
