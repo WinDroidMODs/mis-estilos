@@ -15,14 +15,14 @@
     });
   }
 
-  // Menú móvil
-  var navMenu = document.getElementById('navMenu');
+  // Menú hamburguesa con JS (sin checkbox)
   var toggleBtn = document.querySelector('.nav__toggle');
+  var navMenu = document.getElementById('navMenu');
   if (toggleBtn && navMenu) {
     toggleBtn.addEventListener('click', function(e){
       e.stopPropagation();
       this.classList.toggle('active');
-      navMenu.classList.toggle('open');
+      navMenu.classList.toggle('show');
     });
   }
 
@@ -32,7 +32,7 @@
       var link = dd.querySelector('a:first-child');
       if (link) {
         link.addEventListener('click', function(e) {
-          if (window.innerWidth <= 768) {
+          if (window.innerWidth <= 768 && navMenu.classList.contains('show')) {
             e.preventDefault();
             dd.classList.toggle('open');
           }
@@ -40,6 +40,14 @@
       }
     });
   }
+
+  // Cerrar menú al hacer clic fuera (opcional)
+  document.addEventListener('click', function(event) {
+    if (navMenu && navMenu.classList.contains('show') && !toggleBtn.contains(event.target) && !navMenu.contains(event.target)) {
+      navMenu.classList.remove('show');
+      toggleBtn.classList.remove('active');
+    }
+  });
 
   // Header sticky
   var header = document.getElementById('header');
