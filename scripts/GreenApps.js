@@ -15,6 +15,32 @@
     });
   }
 
+  // Menu móvil
+  var navMenu = document.getElementById('navMenu');
+  var toggleBtn = document.querySelector('.nav__toggle');
+  if (toggleBtn && navMenu) {
+    toggleBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      this.classList.toggle('active');
+      navMenu.classList.toggle('open');
+    });
+  }
+
+  // Dropdowns en móvil
+  if (navMenu) {
+    navMenu.querySelectorAll('.dropdown').forEach(function(dd){
+      var link = dd.querySelector('a:first-child');
+      if (link) {
+        link.addEventListener('click', function(e) {
+          if (window.innerWidth <= 768) {
+            e.preventDefault();
+            dd.classList.toggle('open');
+          }
+        });
+      }
+    });
+  }
+
   // Header sticky
   var header = document.getElementById('header');
   if (header) {
