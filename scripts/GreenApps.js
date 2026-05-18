@@ -15,24 +15,36 @@
     });
   }
 
-  // Menú hamburguesa con JS (sin checkbox)
+  // Menú móvil: manejo manual del checkbox y cierre al hacer clic en un enlace
+  var navCheck = document.getElementById('nav-check');
   var toggleBtn = document.querySelector('.nav__toggle');
-  var navMenu = document.getElementById('navMenu');
-  if (toggleBtn && navMenu) {
-    toggleBtn.addEventListener('click', function(e){
+  if (toggleBtn && navCheck) {
+    // Abrir/cerrar al hacer clic en el botón hamburguesa
+    toggleBtn.addEventListener('click', function(e) {
       e.stopPropagation();
-      this.classList.toggle('active');
-      navMenu.classList.toggle('show');
+      navCheck.checked = !navCheck.checked;
     });
+    // Cerrar el menú cuando se hace clic en cualquier enlace del menú (en móvil)
+    var navMenu = document.getElementById('navMenu');
+    if (navMenu) {
+      navMenu.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          if (window.innerWidth <= 768 && navCheck.checked) {
+            navCheck.checked = false;
+          }
+        });
+      });
+    }
   }
 
-  // Dropdowns en móvil
-  if (navMenu) {
-    navMenu.querySelectorAll('.dropdown').forEach(function(dd){
+  // Dropdowns en móvil: evitar que se cierren al abrir submenús
+  var navMenuElem = document.getElementById('navMenu');
+  if (navMenuElem) {
+    navMenuElem.querySelectorAll('.dropdown').forEach(function(dd) {
       var link = dd.querySelector('a:first-child');
       if (link) {
         link.addEventListener('click', function(e) {
-          if (window.innerWidth <= 768 && navMenu.classList.contains('show')) {
+          if (window.innerWidth <= 768) {
             e.preventDefault();
             dd.classList.toggle('open');
           }
@@ -40,14 +52,6 @@
       }
     });
   }
-
-  // Cerrar menú al hacer clic fuera (opcional)
-  document.addEventListener('click', function(event) {
-    if (navMenu && navMenu.classList.contains('show') && !toggleBtn.contains(event.target) && !navMenu.contains(event.target)) {
-      navMenu.classList.remove('show');
-      toggleBtn.classList.remove('active');
-    }
-  });
 
   // Header sticky
   var header = document.getElementById('header');
