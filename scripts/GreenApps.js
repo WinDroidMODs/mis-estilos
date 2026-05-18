@@ -15,44 +15,6 @@
     });
   }
 
-  // Menú móvil: manejo manual del checkbox y cierre al hacer clic en un enlace
-  var navCheck = document.getElementById('nav-check');
-  var toggleBtn = document.querySelector('.nav__toggle');
-  if (toggleBtn && navCheck) {
-    // Abrir/cerrar al hacer clic en el botón hamburguesa
-    toggleBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      navCheck.checked = !navCheck.checked;
-    });
-    // Cerrar el menú cuando se hace clic en cualquier enlace del menú (en móvil)
-    var navMenu = document.getElementById('navMenu');
-    if (navMenu) {
-      navMenu.querySelectorAll('a').forEach(function(link) {
-        link.addEventListener('click', function() {
-          if (window.innerWidth <= 768 && navCheck.checked) {
-            navCheck.checked = false;
-          }
-        });
-      });
-    }
-  }
-
-  // Dropdowns en móvil: evitar que se cierren al abrir submenús
-  var navMenuElem = document.getElementById('navMenu');
-  if (navMenuElem) {
-    navMenuElem.querySelectorAll('.dropdown').forEach(function(dd) {
-      var link = dd.querySelector('a:first-child');
-      if (link) {
-        link.addEventListener('click', function(e) {
-          if (window.innerWidth <= 768) {
-            e.preventDefault();
-            dd.classList.toggle('open');
-          }
-        });
-      }
-    });
-  }
-
   // Header sticky
   var header = document.getElementById('header');
   if (header) {
