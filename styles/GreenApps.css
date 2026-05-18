@@ -1,6 +1,6 @@
 /* ============================================================
    GreenApps.css v4.12 - Estilos completos
-   Menú móvil con fondo sólido y resaltado en píldora.
+   Incluye mejoras: botón back-to-top elegante y botones cookie en píldora
    ============================================================ */
 
 /* TARJETAS */
@@ -569,7 +569,7 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* BOTÓN VOLVER ARRIBA (ELEGANTE) - visible al 50% */
+/* BOTÓN VOLVER ARRIBA (ELEGANTE) */
 #back-to-top {
   position: fixed;
   bottom: 30px;
@@ -704,43 +704,6 @@
   }
 }
 
-/* MENÚ MÓVIL - FONDO SÓLIDO Y RESALTADO EN PÍLDORA */
-@media (max-width: 768px) {
-  .nav__menu {
-    background: #111118 !important;
-    backdrop-filter: none !important;
-  }
-  .nav__menu a {
-    transition: background 0.2s, color 0.2s, border-radius 0.2s;
-    border-radius: 40px !important;
-  }
-  .nav__menu a:hover,
-  .nav__menu a:active,
-  .nav__menu a:focus,
-  .nav__menu a.active {
-    background: var(--accent-dark) !important;
-    color: #fff !important;
-    border-radius: 40px !important;
-    padding-left: 1.1rem;
-    padding-right: 1.1rem;
-  }
-  .nav__menu .dropdown__menu {
-    background: #1a1a25 !important;
-    border: 1px solid #2a2a3a;
-    border-radius: 12px;
-    padding: 0.5rem;
-  }
-  .nav__menu .dropdown__menu a {
-    border-radius: 40px !important;
-  }
-  .nav__menu .dropdown__menu a:hover,
-  .nav__menu .dropdown__menu a:active,
-  .nav__menu .dropdown__menu a:focus {
-    border-radius: 40px !important;
-    background: var(--accent-dark) !important;
-  }
-}
-
 /* UTILIDADES */
 .text-center { text-align: center; }
 .mt-1 { margin-top: 1rem; }
@@ -757,7 +720,7 @@
   border: 0;
 }
 
-/* MEDIA QUERIES GENERALES */
+/* MEDIA QUERIES PARA SECCIONES NO CRITICAS */
 @media (max-width: 768px) {
   .article { padding: 1.2rem; }
   .article__title { font-size: 1.5rem; }
