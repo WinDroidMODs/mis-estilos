@@ -15,59 +15,41 @@
     });
   }
 
-  // Menu móvil
+  // Menu movil
   var navMenu = document.getElementById('navMenu');
-  var toggleBtn = document.querySelector('.nav__toggle');
-  if (toggleBtn && navMenu) {
-    toggleBtn.addEventListener('click', function(e){
-      e.stopPropagation();
-      this.classList.toggle('active');
-      navMenu.classList.toggle('open');
-    });
-  }
+  document.querySelector('.nav__toggle').addEventListener('click', function(e){
+    e.stopPropagation();
+    this.classList.toggle('active');
+    navMenu.classList.toggle('open');
+  });
 
-  // Dropdowns en móvil
-  if (navMenu) {
-    navMenu.querySelectorAll('.dropdown').forEach(function(dd){
-      var link = dd.querySelector('a:first-child');
-      if (link) {
-        link.addEventListener('click', function(e) {
-          if (window.innerWidth <= 768) {
-            e.preventDefault();
-            dd.classList.toggle('open');
-          }
-        });
-      }
-    });
-  }
+  // Dropdowns en movil
+  navMenu.querySelectorAll('.dropdown').forEach(function(dd){
+    var link = dd.querySelector('a:first-child');
+    if (link) {
+      link.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          dd.classList.toggle('open');
+        }
+      });
+    }
+  });
 
-  // Header sticky
+  // Header sticky y boton volver arriba (aparece al 70% del scroll)
   var header = document.getElementById('header');
-  if (header) {
-    window.addEventListener('scroll', function() {
-      if (window.scrollY > 80) header.classList.add('scrolled');
-      else header.classList.remove('scrolled');
-    });
-  }
-
-  // Botón volver arriba: visible al 50% del scroll total de la página
   var backToTop = document.getElementById('back-to-top');
-  if (backToTop) {
-    window.addEventListener('scroll', function() {
-      var totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      var scrolled = window.scrollY;
-      var percentScrolled = (scrolled / totalHeight) * 100;
-      if (percentScrolled >= 50) {
-        backToTop.classList.add('show');
-      } else {
-        backToTop.classList.remove('show');
-      }
-    });
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 80) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+    var umbralScroll = document.documentElement.scrollHeight * 0.7;
+    if (window.scrollY > umbralScroll) backToTop.classList.add('show');
+    else backToTop.classList.remove('show');
+  });
 
-    backToTop.addEventListener('click', function(){
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  }
+  backToTop.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
 
   // Responder a comentario
   window.replyToComment = function(button) {
