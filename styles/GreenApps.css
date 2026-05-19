@@ -440,7 +440,7 @@
 }
 
 /* ============================================================
-   MENÚ HAMBURGUESA LATERAL (IZQUIERDA)
+   MENÚ HAMBURGUESA LATERAL (SOLO MÓVIL)
    ============================================================ */
 .menu-overlay {
   position: fixed;
@@ -465,7 +465,7 @@
   left: -280px;
   width: 280px;
   height: 100%;
-  background: #111118;
+  background: linear-gradient(135deg, #0c1a0f 0%, #0a0a0f 100%);
   z-index: 999;
   transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 2px 0 12px rgba(0,0,0,0.5);
@@ -563,34 +563,169 @@
   display: none;
 }
 
-/* Botón hamburguesa */
+/* Botón hamburguesa con animación a X (solo móvil) */
 .nav-toggle-btn {
-  display: flex;
+  display: none;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 5px;
   background: none;
   border: none;
   cursor: pointer;
   padding: 10px;
   z-index: 1000;
+  width: 44px;
+  height: 44px;
 }
 .nav-toggle-btn span {
+  display: block;
   width: 24px;
   height: 2px;
   background: #b0bec5;
   border-radius: 2px;
-  transition: 0.2s;
+  transition: transform 0.3s ease, opacity 0.2s ease;
+}
+.nav-toggle-btn.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-toggle-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+.nav-toggle-btn.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
 }
 
-/* Ocultar elementos antiguos */
-.nav__toggle, #nav-check, .nav__menu.old {
+/* Menú horizontal de escritorio (se muestra normalmente) */
+.nav__menu {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+.nav__menu a {
+  display: block;
+  padding: 0.4rem 1rem;
+  color: #b0bec5;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-radius: 30px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  line-height: 1.2;
+  text-decoration: none;
+}
+.nav__menu a:hover,
+.nav__menu a.active {
+  color: #fff;
+  background: #388E3C;
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+}
+.nav__menu .dropdown {
+  position: relative;
+}
+.nav__menu .dropdown > a::after {
+  content: "\f107";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size: 0.65rem;
+  margin-left: 0.35rem;
+  transition: transform 0.3s;
+}
+.nav__menu .dropdown:hover > a::after {
+  transform: rotate(180deg);
+}
+.nav__menu .dropdown__menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #1a1a25;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  min-width: 180px;
+  padding: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  z-index: 999;
+}
+.nav__menu .dropdown:hover .dropdown__menu {
+  display: block;
+}
+.nav__menu .dropdown__menu a {
+  padding: 0.4rem 1rem;
+  font-size: 0.75rem;
+  border-radius: 30px;
+  margin: 2px 0;
+  white-space: nowrap;
+}
+.nav__menu .dropdown__menu a:hover {
+  background: #388E3C;
+  color: #fff;
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+}
+
+/* Header search (visible en escritorio) */
+.header__search {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.search-btn {
   display: none;
 }
 
-/* Ajustes responsive */
+/* ============================================================
+   RESPONSIVE: ocultar menú horizontal y mostrar hamburguesa en móvil/tablet
+   ============================================================ */
 @media (max-width: 768px) {
+  .nav__menu {
+    display: none !important;
+  }
   .header__search {
     display: none !important;
+  }
+  .nav-toggle-btn {
+    display: flex !important;
+  }
+  .search-btn {
+    display: flex !important;
+  }
+  .header__inner {
+    padding: 0.6rem 0.8rem;
+  }
+  .logo {
+    justify-content: center;
+    margin: 0;
+  }
+  .logo__text {
+    font-size: 1.1rem;
+  }
+  .hero__title {
+    font-size: 1.8rem;
+  }
+  .hero__subtitle {
+    font-size: 0.95rem;
+  }
+  .hero__icons i {
+    width: 50px;
+    height: 50px;
+    font-size: 1.6rem;
+  }
+  .hero__search {
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+  .hero__search input,
+  .hero__search button {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+  .container {
+    padding: 0 0.8rem;
+  }
+  .main {
+    padding: 1.5rem 0 0.5rem;
   }
 }
 
