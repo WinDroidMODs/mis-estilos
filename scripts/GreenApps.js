@@ -24,10 +24,136 @@
   }
 
   // -------------------------------
-  // Header sticky y botón volver arriba (umbral 50%)
+  // Elementos del DOM
   // -------------------------------
+  var navMenu = document.getElementById('navMenu');
+  var navToggle = document.querySelector('.nav__toggle');
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
+  var body = document.body;
+
+  // Crear overlay para cerrar el menú al tocar fuera
+  var overlay = document.createElement('div');
+  overlay.className = 'menu-overlay';
+  document.body.appendChild(overlay);
+
+  // -------------------------------
+  // Función para cerrar el menú completo y resetear submenús
+  // -------------------------------
+  function closeFullMenu() {
+    if (navMenu && navMenu.classList.contains('open')) {
+      navMenu.classList.remove('open');
+      if (navToggle) navToggle.classList.remove('active');
+      overlay.classList.remove('active');
+      closeAllSubmenus();
+    }
+  }
+
+  function openFullMenu() {
+    if (navMenu) {
+      navMenu.classList.add('open');
+      if (navToggle) navToggle.classList.add('active');
+      overlay.classList.add('active');
+      closeAllSubmenus(); // Al abrir, aseguramos que no haya submenús abiertos
+    }
+  }
+
+  function closeAllSubmenus() {
+    var dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(function(dd) {
+      dd.classList.remove('open');
+    });
+  }
+
+  function openSubmenu(dropdown) {
+    dropdown.classList.add('open');
+  }
+
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+
+  // -------------------------------
+  // Toggle del menú principal (hamburguesa)
+  // -------------------------------
+  if (navToggle && navMenu) {
+    navToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (navMenu.classList.contains('open')) {
+        closeFullMenu();
+      } else {
+        openFullMenu();
+      }
+    });
+  }
+
+  // -------------------------------
+  // Lógica de submenús tipo acordeón (solo uno abierto a la vez)
+  // -------------------------------
+  function handleDropdownClick(e) {
+    if (!isMobile()) return;
+
+    var dropdown = this.closest('.dropdown');
+    if (!dropdown) return;
+
+    // Prevenir la navegación del enlace padre (solo en móvil)
+    e.preventDefault();
+
+    var isOpen = dropdown.classList.contains('open');
+    if (isOpen) {
+      dropdown.classList.remove('open');
+    } else {
+      // Cerrar todos los demás y abrir este
+      closeAllSubmenus();
+      openSubmenu(dropdown);
+    }
+  }
+
+  // Asignar evento a los enlaces padre de cada dropdown
+  var dropdowns = document.querySelectorAll('.dropdown');
+  dropdowns.forEach(function(dd) {
+    var parentLink = dd.querySelector('a:first-child');
+    if (parentLink) {
+      parentLink.removeEventListener('click', handleDropdownClick);
+      parentLink.addEventListener('click', handleDropdownClick);
+    }
+  });
+
+  // -------------------------------
+  // Cerrar menú al hacer clic en un enlace normal (sin submenú)
+  // También cerrar al hacer clic en un enlace dentro de un submenú
+  // -------------------------------
+  var allNavLinks = document.querySelectorAll('.nav__menu a');
+  allNavLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      if (!isMobile()) return;
+      // Si es un enlace padre de dropdown, ya lo maneja handleDropdownClick
+      var parentDropdown = link.closest('.dropdown');
+      if (parentDropdown && link === parentDropdown.querySelector('a:first-child')) {
+        return; // No cerramos el menú completo, solo se maneja el submenú
+      }
+      // Para cualquier otro enlace (submenú o normal), cerramos el menú completo
+      closeFullMenu();
+    });
+  });
+
+  // Cerrar menú al hacer clic en el overlay
+  if (overlay) {
+    overlay.addEventListener('click', function() {
+      closeFullMenu();
+    });
+  }
+
+  // Cerrar menú al redimensionar la ventana si pasa a modo escritorio
+  window.addEventListener('resize', function() {
+    if (!isMobile() && navMenu && navMenu.classList.contains('open')) {
+      closeFullMenu();
+    }
+  });
+
+  // -------------------------------
+  // Header sticky y botón volver arriba (umbral 50%)
+  // -------------------------------
   window.addEventListener('scroll', function() {
     if (window.scrollY > 80) {
       header.classList.add('scrolled');
@@ -41,117 +167,12 @@
       backToTop.classList.remove('show');
     }
   });
+
   if (backToTop) {
     backToTop.addEventListener('click', function() {
       window.scrollTo({top: 0, behavior: 'smooth'});
     });
   }
-
-  // -------------------------------
-  // Menú hamburguesa: toggle del panel lateral y rotación del botón (X)
-  // -------------------------------
-  var navToggle = document.querySelector('.nav__toggle');
-  var navCheckbox = document.getElementById('nav-check');
-  if (navToggle && navCheckbox) {
-    navToggle.addEventListener('click', function(e) {
-      e.stopPropagation();
-      // Cambia el estado del checkbox (que controla el slide)
-      navCheckbox.checked = !navCheckbox.checked;
-      // Opcional: cambiar la clase active en el toggle para animación de la X (si se usa CSS)
-      navToggle.classList.toggle('active', navCheckbox.checked);
-      // Cuando se abre el menú, reseteamos submenús abiertos para evitar desorden
-      if (navCheckbox.checked) {
-        closeAllSubmenus();
-      }
-    });
-  }
-
-  // -------------------------------
-  // Lógica de submenús en móvil (acordeón: solo uno abierto a la vez)
-  // -------------------------------
-  function isMobile() {
-    return window.innerWidth <= 768;
-  }
-
-  var dropdowns = document.querySelectorAll('.dropdown');
-
-  function closeAllSubmenus() {
-    dropdowns.forEach(function(dd) {
-      dd.classList.remove('open');
-    });
-  }
-
-  function openSubmenu(dropdown) {
-    dropdown.classList.add('open');
-  }
-
-  // Manejador para el clic en el enlace padre del dropdown
-  function handleDropdownClick(e) {
-    if (!isMobile()) return;
-    e.preventDefault();
-    var dropdown = this.closest('.dropdown');
-    if (!dropdown) return;
-
-    var isOpen = dropdown.classList.contains('open');
-    if (isOpen) {
-      // Si ya está abierto, lo cerramos
-      dropdown.classList.remove('open');
-    } else {
-      // Cerrar todos los demás y abrir este
-      closeAllSubmenus();
-      openSubmenu(dropdown);
-    }
-  }
-
-  // Asignar evento a cada dropdown (solo en móvil, pero lo dejamos siempre y condicionamos)
-  dropdowns.forEach(function(dd) {
-    var parentLink = dd.querySelector('a:first-child');
-    if (parentLink) {
-      parentLink.removeEventListener('click', handleDropdownClick);
-      parentLink.addEventListener('click', handleDropdownClick);
-    }
-  });
-
-  // -------------------------------
-  // Cerrar el menú completo al hacer clic en un enlace normal (sin submenú)
-  // También cerrar al hacer clic en un enlace dentro de un submenú
-  // -------------------------------
-  function closeFullMenu() {
-    if (navCheckbox && navCheckbox.checked) {
-      navCheckbox.checked = false;
-      if (navToggle) navToggle.classList.remove('active');
-      closeAllSubmenus();
-    }
-  }
-
-  var allNavLinks = document.querySelectorAll('.nav__menu a');
-  allNavLinks.forEach(function(link) {
-    link.addEventListener('click', function(e) {
-      if (!isMobile()) return;
-      // Si el clic fue en un dropdown padre (en móvil), no cerramos el menú completo,
-      // porque ya lo maneja handleDropdownClick (que hace preventDefault)
-      if (link.closest('.dropdown') && link === link.closest('.dropdown').querySelector('a:first-child')) {
-        return;
-      }
-      // Para cualquier otro enlace (submenú o link normal), cerramos el menú completo
-      closeFullMenu();
-    });
-  });
-
-  // Cerrar menú al hacer clic en el overlay (si existe)
-  var overlay = document.querySelector('.menu-overlay');
-  if (overlay) {
-    overlay.addEventListener('click', function() {
-      closeFullMenu();
-    });
-  }
-
-  // Opcional: cerrar menú si se cambia el tamaño de pantalla a escritorio
-  window.addEventListener('resize', function() {
-    if (window.innerWidth > 768 && navCheckbox && navCheckbox.checked) {
-      closeFullMenu();
-    }
-  });
 
   // -------------------------------
   // Responder a comentarios (reply)
