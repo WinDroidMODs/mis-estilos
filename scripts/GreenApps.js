@@ -15,91 +15,76 @@
     });
   }
 
-  // Elementos del menú
-  var navCheck = document.getElementById('nav-check');
-  var navToggle = document.querySelector('.nav__toggle');
+  // Menú móvil: toggle general (abrir/cerrar el cajón del menú)
   var navMenu = document.getElementById('navMenu');
+  var navToggle = document.querySelector('.nav__toggle');
   var header = document.getElementById('header');
-  var backToTop = document.getElementById('back-to-top');
+  var body = document.body;
 
-  // Función para cerrar el menú principal
-  function closeMenu() {
-    if (navCheck && navCheck.checked) {
-      navCheck.checked = false;
-      // Eliminar clase 'open' del menú y del toggle si existe
-      if (navMenu) navMenu.classList.remove('open');
+  if (navToggle && navMenu) {
+    navToggle.addEventListener('click', function(e){
+      e.stopPropagation();
+      this.classList.toggle('active');
+      navMenu.classList.toggle('open');
+      // Prevenir scroll cuando el menú está abierto
+      if (navMenu.classList.contains('open')) {
+        body.style.overflow = 'hidden';
+      } else {
+        body.style.overflow = '';
+      }
+    });
+  }
+
+  // Cerrar menú móvil al hacer clic en un enlace que NO tiene submenú
+  function closeMobileMenu() {
+    if (window.innerWidth <= 768 && navMenu && navMenu.classList.contains('open')) {
+      navMenu.classList.remove('open');
       if (navToggle) navToggle.classList.remove('active');
-      // Opcional: cerrar también cualquier submenú abierto
-      if (navMenu) {
-        var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
-        openDropdowns.forEach(function(dd) {
-          dd.classList.remove('open');
+      body.style.overflow = '';
+    }
+  }
+
+  // DROPDOWNS EN MÓVIL: comportamiento interruptor y solo uno abierto
+  if (navMenu) {
+    var dropdowns = navMenu.querySelectorAll('.dropdown');
+    dropdowns.forEach(function(dd){
+      var link = dd.querySelector('a:first-child');
+      if (link) {
+        link.addEventListener('click', function(e) {
+          if (window.innerWidth <= 768) {
+            e.preventDefault(); // Evita navegar al hacer clic en el padre (solo abre/cierra)
+            // Si este dropdown ya está abierto, lo cerramos
+            if (dd.classList.contains('open')) {
+              dd.classList.remove('open');
+            } else {
+              // Cerrar todos los demás dropdowns
+              dropdowns.forEach(function(otherDd){
+                otherDd.classList.remove('open');
+              });
+              // Abrir el actual
+              dd.classList.add('open');
+            }
+          }
         });
       }
-    }
-  }
+    });
 
-  // Cerrar menú al hacer clic en un enlace (excepto el padre de submenú)
-  if (navMenu) {
-    navMenu.addEventListener('click', function(e) {
-      var target = e.target;
-      // Buscar si el click fue en un enlace <a>
-      var link = target.closest('a');
-      if (!link) return;
-
-      // Verificar si el enlace es el padre de un dropdown (submenú)
-      var parentDropdown = link.closest('.dropdown');
-      if (parentDropdown && parentDropdown.querySelector(':scope > a') === link) {
-        // Es el enlace que abre/cierra el submenú -> no cerrar el menú principal
-        e.preventDefault();
-        parentDropdown.classList.toggle('open');
-        return;
-      }
-
-      // Cualquier otro enlace: cerrar el menú principal (permitir la navegación)
-      // Pequeño timeout para dar tiempo a que el navegador procese el clic
-      setTimeout(closeMenu, 100);
+    // También cerrar menú completo al hacer clic en enlaces que no son dropdown
+    var allLinks = navMenu.querySelectorAll('a');
+    allLinks.forEach(function(link){
+      link.addEventListener('click', function(e){
+        // Si el enlace NO es el primer hijo de un dropdown (es decir, no es el que tiene submenú)
+        var parentDropdown = link.closest('.dropdown');
+        if (!parentDropdown || link !== parentDropdown.querySelector('a:first-child')) {
+          // Es un enlace normal (o sub-enlace) -> cerrar menú móvil
+          closeMobileMenu();
+        }
+      });
     });
   }
 
-  // Cerrar menú al hacer clic fuera de él (en cualquier parte del documento)
-  document.addEventListener('click', function(e) {
-    // Si el menú no está abierto, salir
-    if (!navCheck || !navCheck.checked) return;
-
-    // Elementos que no deben cerrar el menú: el propio menú, el botón toggle, y cualquier elemento interno del menú
-    var isInsideMenu = navMenu && navMenu.contains(e.target);
-    var isToggle = navToggle && (navToggle === e.target || navToggle.contains(e.target));
-
-    if (!isInsideMenu && !isToggle) {
-      closeMenu();
-    }
-  });
-
-  // Evitar que el clic dentro del menú se propague al documento (no necesario, pero por seguridad)
-  if (navMenu) {
-    navMenu.addEventListener('click', function(e) {
-      e.stopPropagation();
-    });
-  }
-
-  // Menu toggle (abrir/cerrar) - ya funciona con el label, pero añadimos mejora para cerrar si se vuelve a tocar el toggle
-  if (navToggle) {
-    navToggle.addEventListener('click', function(e) {
-      e.stopPropagation();
-      // El checkbox se togglea automáticamente gracias al label
-      // Solo aseguramos que si se cierra, también se quiten clases
-      if (navCheck && !navCheck.checked) {
-        if (navMenu) navMenu.classList.remove('open');
-        if (navToggle) navToggle.classList.remove('active');
-      } else {
-        if (navMenu) navMenu.classList.add('open');
-        if (navToggle) navToggle.classList.add('active');
-      }
-    });
-  }
-
-  // Header sticky y boton volver arriba (aparece al 50%)
+  // Header sticky y botón volver arriba (aparece al 50% del scroll)
+  var backToTop = document.getElementById('back-to-top');
   window.addEventListener('scroll', function() {
     if (window.scrollY > 80) header.classList.add('scrolled');
     else header.classList.remove('scrolled');
@@ -142,5 +127,15 @@
       editor.src = formSrc;
     }
   };
+
+  // Cerrar menú si se hace clic fuera de él (opcional, mejora UX)
+  document.addEventListener('click', function(event) {
+    if (window.innerWidth <= 768 && navMenu && navMenu.classList.contains('open')) {
+      var isClickInside = navMenu.contains(event.target) || navToggle.contains(event.target);
+      if (!isClickInside) {
+        closeMobileMenu();
+      }
+    }
+  });
 
 })();
