@@ -30,36 +30,48 @@
   var navToggle = document.querySelector('.nav__toggle');
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
-  var body = document.body;
+  var menuOverlay = document.querySelector('.menu-overlay');
 
-  // Crear overlay para cerrar el menú al tocar fuera
-  var overlay = document.createElement('div');
-  overlay.className = 'menu-overlay';
-  document.body.appendChild(overlay);
+  // Crear overlay si no existe (para móvil)
+  if (!menuOverlay && window.innerWidth <= 768) {
+    menuOverlay = document.createElement('div');
+    menuOverlay.className = 'menu-overlay';
+    document.body.appendChild(menuOverlay);
+  }
 
   // -------------------------------
-  // Función para cerrar el menú completo y resetear submenús
+  // Funciones para el menú lateral
   // -------------------------------
-  function closeFullMenu() {
+  function openMenu() {
+    if (navMenu) navMenu.classList.add('open');
+    if (menuOverlay) menuOverlay.classList.add('active');
+    if (navToggle) navToggle.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Evita scroll detrás
+  }
+
+  function closeMenu() {
+    if (navMenu) navMenu.classList.remove('open');
+    if (menuOverlay) menuOverlay.classList.remove('active');
+    if (navToggle) navToggle.classList.remove('active');
+    document.body.style.overflow = '';
+    // Opcional: cerrar todos los submenús al cerrar el menú lateral
+    closeAllSubmenus();
+  }
+
+  function toggleMenu() {
     if (navMenu && navMenu.classList.contains('open')) {
-      navMenu.classList.remove('open');
-      if (navToggle) navToggle.classList.remove('active');
-      overlay.classList.remove('active');
-      closeAllSubmenus();
+      closeMenu();
+    } else {
+      openMenu();
     }
   }
 
-  function openFullMenu() {
-    if (navMenu) {
-      navMenu.classList.add('open');
-      if (navToggle) navToggle.classList.add('active');
-      overlay.classList.add('active');
-      closeAllSubmenus(); // Al abrir, aseguramos que no haya submenús abiertos
-    }
-  }
+  // -------------------------------
+  // Submenús tipo acordeón (solo móvil)
+  // -------------------------------
+  var dropdowns = document.querySelectorAll('.dropdown');
 
   function closeAllSubmenus() {
-    var dropdowns = document.querySelectorAll('.dropdown');
     dropdowns.forEach(function(dd) {
       dd.classList.remove('open');
     });
@@ -73,82 +85,90 @@
     return window.innerWidth <= 768;
   }
 
-  // -------------------------------
-  // Toggle del menú principal (hamburguesa)
-  // -------------------------------
-  if (navToggle && navMenu) {
-    navToggle.addEventListener('click', function(e) {
-      e.stopPropagation();
-      if (navMenu.classList.contains('open')) {
-        closeFullMenu();
-      } else {
-        openFullMenu();
-      }
-    });
-  }
-
-  // -------------------------------
-  // Lógica de submenús tipo acordeón (solo uno abierto a la vez)
-  // -------------------------------
   function handleDropdownClick(e) {
     if (!isMobile()) return;
-
+    // Prevenir la navegación del enlace padre en móvil
+    e.preventDefault();
     var dropdown = this.closest('.dropdown');
     if (!dropdown) return;
-
-    // Prevenir la navegación del enlace padre (solo en móvil)
-    e.preventDefault();
 
     var isOpen = dropdown.classList.contains('open');
     if (isOpen) {
       dropdown.classList.remove('open');
     } else {
-      // Cerrar todos los demás y abrir este
       closeAllSubmenus();
       openSubmenu(dropdown);
     }
   }
 
-  // Asignar evento a los enlaces padre de cada dropdown
-  var dropdowns = document.querySelectorAll('.dropdown');
-  dropdowns.forEach(function(dd) {
-    var parentLink = dd.querySelector('a:first-child');
-    if (parentLink) {
-      parentLink.removeEventListener('click', handleDropdownClick);
-      parentLink.addEventListener('click', handleDropdownClick);
+  // Asignar evento a cada dropdown (solo en móvil)
+  function bindDropdownEvents() {
+    dropdowns.forEach(function(dd) {
+      var parentLink = dd.querySelector('a:first-child');
+      if (parentLink) {
+        parentLink.removeEventListener('click', handleDropdownClick);
+        parentLink.addEventListener('click', handleDropdownClick);
+      }
+    });
+  }
+
+  // Re-evaluar cuando cambie el tamaño de la ventana (por si cambia de móvil a escritorio)
+  window.addEventListener('resize', function() {
+    if (!isMobile()) {
+      // En escritorio, aseguramos que el menú no esté abierto y se quiten estilos
+      if (navMenu) navMenu.classList.remove('open');
+      if (menuOverlay) menuOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+      closeAllSubmenus();
+      // En escritorio, los dropdowns deben funcionar con hover (no con click)
+      dropdowns.forEach(function(dd) {
+        var parentLink = dd.querySelector('a:first-child');
+        if (parentLink) {
+          parentLink.removeEventListener('click', handleDropdownClick);
+          // Restauramos comportamiento normal (sin preventDefault)
+          parentLink.addEventListener('click', function(e) {
+            // Permitir navegación normal en escritorio
+            return true;
+          });
+        }
+      });
+    } else {
+      bindDropdownEvents();
     }
   });
 
+  // Ejecutar binding inicial
+  bindDropdownEvents();
+
   // -------------------------------
-  // Cerrar menú al hacer clic en un enlace normal (sin submenú)
-  // También cerrar al hacer clic en un enlace dentro de un submenú
+  // Evento del botón hamburguesa
   // -------------------------------
+  if (navToggle) {
+    navToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      toggleMenu();
+    });
+  }
+
+  // Cerrar menú al hacer clic en el overlay
+  if (menuOverlay) {
+    menuOverlay.addEventListener('click', function() {
+      closeMenu();
+    });
+  }
+
+  // Cerrar menú al hacer clic en cualquier enlace del menú (solo en móvil)
   var allNavLinks = document.querySelectorAll('.nav__menu a');
   allNavLinks.forEach(function(link) {
     link.addEventListener('click', function(e) {
       if (!isMobile()) return;
-      // Si es un enlace padre de dropdown, ya lo maneja handleDropdownClick
-      var parentDropdown = link.closest('.dropdown');
-      if (parentDropdown && link === parentDropdown.querySelector('a:first-child')) {
-        return; // No cerramos el menú completo, solo se maneja el submenú
+      // Si el clic es en un dropdown padre (con submenú) no cerramos el menú principal
+      if (link.closest('.dropdown') && link === link.closest('.dropdown').querySelector('a:first-child')) {
+        return;
       }
-      // Para cualquier otro enlace (submenú o normal), cerramos el menú completo
-      closeFullMenu();
+      // Para cualquier otro enlace (submenú o enlace normal), cerramos el menú lateral
+      closeMenu();
     });
-  });
-
-  // Cerrar menú al hacer clic en el overlay
-  if (overlay) {
-    overlay.addEventListener('click', function() {
-      closeFullMenu();
-    });
-  }
-
-  // Cerrar menú al redimensionar la ventana si pasa a modo escritorio
-  window.addEventListener('resize', function() {
-    if (!isMobile() && navMenu && navMenu.classList.contains('open')) {
-      closeFullMenu();
-    }
   });
 
   // -------------------------------
