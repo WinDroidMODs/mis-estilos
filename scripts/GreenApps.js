@@ -24,24 +24,32 @@
   }
 
   // ===============================
-  // Menú lateral hamburguesa (acordeón con flechas)
+  // Menú lateral hamburguesa (solo móvil)
   // ===============================
   var menuToggle = document.getElementById('nav-toggle');
   var menuPanel = document.getElementById('nav-menu-panel');
   var menuOverlay = document.getElementById('menu-overlay');
   var body = document.body;
 
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+
   function openMenu() {
+    if (!isMobile()) return;
     if (menuPanel) menuPanel.classList.add('open');
     if (menuOverlay) menuOverlay.classList.add('active');
+    if (menuToggle) menuToggle.classList.add('active');
     body.style.overflow = 'hidden';
   }
   function closeMenu() {
     if (menuPanel) menuPanel.classList.remove('open');
     if (menuOverlay) menuOverlay.classList.remove('active');
+    if (menuToggle) menuToggle.classList.remove('active');
     body.style.overflow = '';
   }
   function toggleMenu() {
+    if (!isMobile()) return;
     if (menuPanel && menuPanel.classList.contains('open')) {
       closeMenu();
     } else {
@@ -54,7 +62,7 @@
     menuOverlay.addEventListener('click', closeMenu);
   }
 
-  // Acordeón: solo un submenú abierto a la vez, flecha giratoria
+  // Acordeón: solo un submenú abierto a la vez (solo móvil)
   var menuItems = document.querySelectorAll('.nav-menu-item');
   function closeAllSubmenus(exceptItem) {
     menuItems.forEach(function(item) {
@@ -64,6 +72,7 @@
     });
   }
   function toggleSubmenu(item) {
+    if (!isMobile()) return;
     var isOpen = item.classList.contains('open');
     if (isOpen) {
       item.classList.remove('open');
@@ -76,22 +85,24 @@
   menuItems.forEach(function(item) {
     var link = item.querySelector(':scope > .nav-menu-link');
     if (link && item.querySelector('.nav-submenu')) {
-      // Prevenir navegación en móvil y manejar acordeón
       link.addEventListener('click', function(e) {
-        e.preventDefault();
-        toggleSubmenu(item);
+        if (isMobile()) {
+          e.preventDefault();
+          toggleSubmenu(item);
+        }
       });
     } else if (link) {
-      // Enlace normal: cerrar menú al hacer clic
       link.addEventListener('click', function() {
-        closeMenu();
+        if (isMobile()) {
+          closeMenu();
+        }
       });
     }
   });
 
-  // Cerrar menú al redimensionar a escritorio (>768px)
+  // Cerrar menú al redimensionar a escritorio
   window.addEventListener('resize', function() {
-    if (window.innerWidth > 768 && menuPanel && menuPanel.classList.contains('open')) {
+    if (!isMobile() && menuPanel && menuPanel.classList.contains('open')) {
       closeMenu();
     }
   });
