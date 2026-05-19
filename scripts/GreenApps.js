@@ -17,39 +17,47 @@
 
   // Menu movil
   var navMenu = document.getElementById('navMenu');
-  document.querySelector('.nav__toggle').addEventListener('click', function(e){
-    e.stopPropagation();
-    this.classList.toggle('active');
-    navMenu.classList.toggle('open');
-  });
+  var navToggle = document.querySelector('.nav__toggle');
+  if (navToggle && navMenu) {
+    navToggle.addEventListener('click', function(e){
+      e.stopPropagation();
+      this.classList.toggle('active');
+      navMenu.classList.toggle('open');
+    });
+  }
 
   // Dropdowns en movil
-  navMenu.querySelectorAll('.dropdown').forEach(function(dd){
-    var link = dd.querySelector('a:first-child');
-    if (link) {
-      link.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768) {
-          e.preventDefault();
-          dd.classList.toggle('open');
-        }
-      });
-    }
-  });
+  if (navMenu) {
+    navMenu.querySelectorAll('.dropdown').forEach(function(dd){
+      var link = dd.querySelector('a:first-child');
+      if (link) {
+        link.addEventListener('click', function(e) {
+          if (window.innerWidth <= 768) {
+            e.preventDefault();
+            dd.classList.toggle('open');
+          }
+        });
+      }
+    });
+  }
 
-  // Header sticky y boton volver arriba (aparece al 70% del scroll)
+  // Header sticky y boton volver arriba (aparece al 50% del scroll)
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
   window.addEventListener('scroll', function() {
     if (window.scrollY > 80) header.classList.add('scrolled');
     else header.classList.remove('scrolled');
-    var umbralScroll = document.documentElement.scrollHeight * 0.7;
+    // Umbral cambiado al 50% (0.5)
+    var umbralScroll = document.documentElement.scrollHeight * 0.5;
     if (window.scrollY > umbralScroll) backToTop.classList.add('show');
     else backToTop.classList.remove('show');
   });
 
-  backToTop.addEventListener('click', function(){
-    window.scrollTo({top:0, behavior:'smooth'});
-  });
+  if (backToTop) {
+    backToTop.addEventListener('click', function(){
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  }
 
   // Responder a comentario
   window.replyToComment = function(button) {
@@ -58,7 +66,7 @@
     var notice = document.getElementById('reply-notice');
     var authorSpan = document.getElementById('reply-author-name');
     var editor = document.getElementById('comment-editor');
-    var formSrc = document.getElementById('comment-editor-src').href;
+    var formSrc = document.getElementById('comment-editor-src') ? document.getElementById('comment-editor-src').href : null;
 
     if (notice && authorSpan && editor && formSrc) {
       authorSpan.textContent = 'Respondiendo a ' + author;
@@ -72,7 +80,7 @@
   window.cancelReply = function() {
     var notice = document.getElementById('reply-notice');
     var editor = document.getElementById('comment-editor');
-    var formSrc = document.getElementById('comment-editor-src').href;
+    var formSrc = document.getElementById('comment-editor-src') ? document.getElementById('comment-editor-src').href : null;
 
     if (notice && editor && formSrc) {
       notice.classList.remove('show');
