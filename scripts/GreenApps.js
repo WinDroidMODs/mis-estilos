@@ -24,60 +24,55 @@
   }
 
   // -------------------------------
-  // Menú hamburguesa: panel lateral izquierdo + overlay
+  // Header sticky y botón volver arriba (umbral 50%)
   // -------------------------------
-  var navMenu = document.getElementById('navMenu');
-  var navToggle = document.querySelector('.nav__toggle');
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
-
-  // Crear overlay si no existe
-  var menuOverlay = document.querySelector('.menu-overlay');
-  if (!menuOverlay) {
-    menuOverlay = document.createElement('div');
-    menuOverlay.className = 'menu-overlay';
-    document.body.appendChild(menuOverlay);
-  }
-
-  function openMenu() {
-    navMenu.classList.add('open');
-    navToggle.classList.add('active');
-    menuOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Evita scroll detrás
-  }
-
-  function closeMenu() {
-    navMenu.classList.remove('open');
-    navToggle.classList.remove('active');
-    menuOverlay.classList.remove('active');
-    document.body.style.overflow = '';
-    // Opcional: cerrar todos los submenús al cerrar el panel
-    closeAllSubmenus();
-  }
-
-  function toggleMenu() {
-    if (navMenu.classList.contains('open')) {
-      closeMenu();
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 80) {
+      header.classList.add('scrolled');
     } else {
-      openMenu();
+      header.classList.remove('scrolled');
     }
-  }
-
-  if (navToggle) {
-    navToggle.addEventListener('click', function(e) {
-      e.stopPropagation();
-      toggleMenu();
+    var umbralScroll = document.documentElement.scrollHeight * 0.5;
+    if (window.scrollY > umbralScroll) {
+      backToTop.classList.add('show');
+    } else {
+      backToTop.classList.remove('show');
+    }
+  });
+  if (backToTop) {
+    backToTop.addEventListener('click', function() {
+      window.scrollTo({top: 0, behavior: 'smooth'});
     });
   }
 
-  // Cerrar menú al hacer clic en el overlay
-  if (menuOverlay) {
-    menuOverlay.addEventListener('click', closeMenu);
+  // -------------------------------
+  // Menú hamburguesa: toggle del panel lateral y rotación del botón (X)
+  // -------------------------------
+  var navToggle = document.querySelector('.nav__toggle');
+  var navCheckbox = document.getElementById('nav-check');
+  if (navToggle && navCheckbox) {
+    navToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      // Cambia el estado del checkbox (que controla el slide)
+      navCheckbox.checked = !navCheckbox.checked;
+      // Opcional: cambiar la clase active en el toggle para animación de la X (si se usa CSS)
+      navToggle.classList.toggle('active', navCheckbox.checked);
+      // Cuando se abre el menú, reseteamos submenús abiertos para evitar desorden
+      if (navCheckbox.checked) {
+        closeAllSubmenus();
+      }
+    });
   }
 
   // -------------------------------
-  // Lógica de submenús en móvil: acordeón y flecha giratoria
+  // Lógica de submenús en móvil (acordeón: solo uno abierto a la vez)
   // -------------------------------
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+
   var dropdowns = document.querySelectorAll('.dropdown');
 
   function closeAllSubmenus() {
@@ -90,30 +85,25 @@
     dropdown.classList.add('open');
   }
 
-  function isMobile() {
-    return window.innerWidth <= 768;
-  }
-
+  // Manejador para el clic en el enlace padre del dropdown
   function handleDropdownClick(e) {
-    // Solo en móvil
     if (!isMobile()) return;
-
+    e.preventDefault();
     var dropdown = this.closest('.dropdown');
     if (!dropdown) return;
 
-    // Prevenir la navegación del enlace padre (solo en móvil)
-    e.preventDefault();
-
     var isOpen = dropdown.classList.contains('open');
     if (isOpen) {
+      // Si ya está abierto, lo cerramos
       dropdown.classList.remove('open');
     } else {
+      // Cerrar todos los demás y abrir este
       closeAllSubmenus();
       openSubmenu(dropdown);
     }
   }
 
-  // Asignar evento a cada enlace padre de dropdown
+  // Asignar evento a cada dropdown (solo en móvil, pero lo dejamos siempre y condicionamos)
   dropdowns.forEach(function(dd) {
     var parentLink = dd.querySelector('a:first-child');
     if (parentLink) {
@@ -123,59 +113,45 @@
   });
 
   // -------------------------------
-  // Cerrar menú completo al hacer clic en un enlace normal (sin submenú o dentro de submenú)
-  // También cerrar al hacer clic en enlaces de submenú para navegar
+  // Cerrar el menú completo al hacer clic en un enlace normal (sin submenú)
+  // También cerrar al hacer clic en un enlace dentro de un submenú
   // -------------------------------
+  function closeFullMenu() {
+    if (navCheckbox && navCheckbox.checked) {
+      navCheckbox.checked = false;
+      if (navToggle) navToggle.classList.remove('active');
+      closeAllSubmenus();
+    }
+  }
+
   var allNavLinks = document.querySelectorAll('.nav__menu a');
   allNavLinks.forEach(function(link) {
     link.addEventListener('click', function(e) {
-      // Si estamos en móvil y el clic fue en un dropdown padre (el que tiene submenú), no cerramos el panel
-      if (isMobile() && link.closest('.dropdown') && link === link.closest('.dropdown').querySelector('a:first-child')) {
-        // No hacemos nada, el submenú se maneja arriba
+      if (!isMobile()) return;
+      // Si el clic fue en un dropdown padre (en móvil), no cerramos el menú completo,
+      // porque ya lo maneja handleDropdownClick (que hace preventDefault)
+      if (link.closest('.dropdown') && link === link.closest('.dropdown').querySelector('a:first-child')) {
         return;
       }
-      // Para cualquier otro enlace (submenú o link normal), cerramos el panel lateral
-      if (isMobile()) {
-        closeMenu();
-      }
+      // Para cualquier otro enlace (submenú o link normal), cerramos el menú completo
+      closeFullMenu();
     });
   });
 
-  // Si la ventana se redimensiona a >768px, cerramos el menú y eliminamos estilos forzados
-  window.addEventListener('resize', function() {
-    if (window.innerWidth > 768) {
-      if (navMenu.classList.contains('open')) {
-        closeMenu();
-      }
-      // Restauramos overflow del body por si acaso
-      document.body.style.overflow = '';
-    }
-  });
-
-  // -------------------------------
-  // Header sticky y botón volver arriba (umbral 50%)
-  // -------------------------------
-  window.addEventListener('scroll', function() {
-    if (window.scrollY > 80) {
-      if (header) header.classList.add('scrolled');
-    } else {
-      if (header) header.classList.remove('scrolled');
-    }
-    if (backToTop) {
-      var umbralScroll = document.documentElement.scrollHeight * 0.5;
-      if (window.scrollY > umbralScroll) {
-        backToTop.classList.add('show');
-      } else {
-        backToTop.classList.remove('show');
-      }
-    }
-  });
-
-  if (backToTop) {
-    backToTop.addEventListener('click', function() {
-      window.scrollTo({top: 0, behavior: 'smooth'});
+  // Cerrar menú al hacer clic en el overlay (si existe)
+  var overlay = document.querySelector('.menu-overlay');
+  if (overlay) {
+    overlay.addEventListener('click', function() {
+      closeFullMenu();
     });
   }
+
+  // Opcional: cerrar menú si se cambia el tamaño de pantalla a escritorio
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 768 && navCheckbox && navCheckbox.checked) {
+      closeFullMenu();
+    }
+  });
 
   // -------------------------------
   // Responder a comentarios (reply)
