@@ -15,45 +15,61 @@
     });
   }
 
-  // Menu movil
+  // Menú móvil (control directo)
+  var navCheck = document.getElementById('nav-check');
   var navMenu = document.getElementById('navMenu');
   var navToggle = document.querySelector('.nav__toggle');
-  var navCheck = document.getElementById('nav-check');
 
-  if (navToggle && navMenu && navCheck) {
-    navToggle.addEventListener('click', function(e){
-      e.stopPropagation();
-      this.classList.toggle('active');
-      navMenu.classList.toggle('open');
-    });
-
-    // Cerrar menú al hacer clic en enlaces directos (sin submenú)
-    navMenu.querySelectorAll('a:not(.dropdown > a)').forEach(function(link) {
-      link.addEventListener('click', function() {
-        if (window.innerWidth <= 768) {
-          navCheck.checked = false;
-        }
-      });
-    });
-
-    // Cerrar menú al hacer clic en enlaces del submenú
-    navMenu.querySelectorAll('.dropdown__menu a').forEach(function(link) {
-      link.addEventListener('click', function() {
-        if (window.innerWidth <= 768) {
-          navCheck.checked = false;
-        }
-      });
-    });
+  function openMenu() {
+    if (navCheck) navCheck.checked = true;
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    if (navCheck) navCheck.checked = false;
+    document.body.style.overflow = '';
+    // Cierra todos los submenús al cerrar el panel
+    document.querySelectorAll('.dropdown.open').forEach(function(d){ d.classList.remove('open'); });
   }
 
-  // Dropdowns en movil (abrir/cerrar con flecha)
-  if (navMenu) {
+  if (navToggle && navMenu && navCheck) {
+    navToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (navCheck.checked) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
+    // Overlay cierra el menú
+    var overlay = document.querySelector('.menu-overlay');
+    if (overlay) {
+      overlay.addEventListener('click', function() {
+        closeMenu();
+      });
+    }
+
+    // Cerrar menú al hacer clic en enlaces, EXCEPTO las flechas de submenú
+    navMenu.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768) {
+          // Si es el primer enlace de un dropdown, no cerrar
+          if (link.parentElement.classList.contains('dropdown') && link === link.parentElement.children[0]) {
+            return;
+          }
+          closeMenu();
+        }
+      });
+    });
+
+    // Dropdowns: cada flecha abre/cierra su submenú (múltiples abiertos permitidos)
     navMenu.querySelectorAll('.dropdown').forEach(function(dd){
-      var link = dd.querySelector('a:first-child');
-      if (link) {
-        link.addEventListener('click', function(e) {
+      var toggleLink = dd.querySelector('a:first-child');
+      if (toggleLink) {
+        toggleLink.addEventListener('click', function(e) {
           if (window.innerWidth <= 768) {
             e.preventDefault();
+            e.stopPropagation(); // evita cerrar el panel
             dd.classList.toggle('open');
           }
         });
@@ -61,7 +77,7 @@
     });
   }
 
-  // Header sticky y boton volver arriba (aparece al 50% del scroll)
+  // Header sticky y botón volver arriba
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
   window.addEventListener('scroll', function() {
@@ -95,7 +111,6 @@
     }
   };
 
-  // Cancelar respuesta
   window.cancelReply = function() {
     var notice = document.getElementById('reply-notice');
     var editor = document.getElementById('comment-editor');
