@@ -451,167 +451,14 @@ a, button, .post-card, .pagination a, .share-buttons a, .tag-cloud a, .popular-p
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* ============================================================
-   OVERLAY DEL MENÚ MÓVIL (nuevo)
-   ============================================================ */
-.nav-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6);
-  z-index: 999;
-  cursor: pointer;
-}
-#nav-check:checked ~ .nav-overlay {
-  display: block;
-}
-
-/* ============================================================
    MEDIA QUERIES PARA SECCIONES NO CRITICAS
    ============================================================ */
 @media (max-width:768px){
-  /* Ajustes generales */
   .article{padding:1.2rem}.article__title{font-size:1.5rem}
   .footer{margin-top:0.3rem}
   #back-to-top{bottom:15px;right:15px;width:40px;height:40px;font-size:1.2rem}
   .post-comments { padding: 1rem; }
   .comment-avatar { width: 45px; height: 45px; }
-
-  /* Header en móvil con grid */
-  .header__inner {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 0.8rem;
-  }
-  .logo {
-    grid-column: 2;
-    justify-self: center;
-    margin: 0;
-  }
-  .nav__toggle {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 10px;
-    grid-column: 1;
-    justify-self: start;
-    margin: 0;
-    cursor: pointer;
-  }
-  .search-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    color: #b0bec5;
-    font-size: 1.2rem;
-    grid-column: 3;
-    justify-self: end;
-    margin: 0;
-    cursor: pointer;
-  }
-
-  /* Ocultar buscador de escritorio */
-  .header__search{display:none!important}
-
-  /* Contenedor del menú (se quita posicionamiento absoluto) */
-  #header-menu {
-    position: static;
-    z-index: auto;
-  }
-
-  /* Menú lateral deslizable */
-  .nav__menu {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    height: 100dvh;
-    width: 85%;
-    max-width: 320px;
-    background: var(--hero-bg);
-    padding: 1.5rem 1rem;
-    gap: 0.8rem;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-    z-index: 1001;
-    overflow-y: auto;
-    box-shadow: 4px 0 20px rgba(0,0,0,0.5);
-    border-right: 1px solid var(--accent);
-  }
-  #nav-check:checked ~ header .nav__menu {
-    transform: translateX(0);
-  }
-
-  /* Estilos de los enlaces en el menú lateral */
-  .nav__menu a {
-    font-size: 1.1rem;
-    padding: 0.8rem 1rem;
-    font-weight: 600;
-    white-space: normal;
-    line-height: 1.3;
-    border-radius: 30px;
-    text-align: left;
-    color: #e0e0e0;
-    text-decoration: none;
-  }
-  .nav__menu a:hover,
-  .nav__menu a.active {
-    background: var(--accent);
-    color: #fff;
-    padding-left: 1.2rem;
-  }
-
-  /* Flecha en dropdowns */
-  .nav__menu .dropdown > a::after {
-    content: "\f107";
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    font-size: 0.9rem;
-    margin-left: 0.5rem;
-    transition: transform 0.3s;
-  }
-  .nav__menu .dropdown.open > a::after {
-    transform: rotate(180deg);
-  }
-
-  /* Submenú desplegable */
-  .nav__menu .dropdown__menu {
-    display: none;
-    flex-direction: column;
-    background: rgba(0,0,0,0.3);
-    border-radius: 12px;
-    padding: 0.5rem;
-    margin-top: 0.3rem;
-  }
-  .nav__menu .dropdown.open .dropdown__menu {
-    display: flex;
-  }
-  .nav__menu .dropdown__menu a {
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
-    border-radius: 30px;
-    text-align: left;
-  }
-
-  /* Transición de hamburguesa a X (se mantiene) */
-  #nav-check:checked ~ header .nav__toggle span:nth-child(1) {
-    transform: rotate(45deg) translate(4px,5px);
-  }
-  #nav-check:checked ~ header .nav__toggle span:nth-child(2) {
-    opacity: 0;
-  }
-  #nav-check:checked ~ header .nav__toggle span:nth-child(3) {
-    transform: rotate(-45deg) translate(4px,-5px);
-  }
 }
 
 @media (max-width:480px){
@@ -628,7 +475,4 @@ a, button, .post-card, .pagination a, .share-buttons a, .tag-cloud a, .popular-p
   .footer__links a{font-size:.7rem}
   .footer__copy{padding:.6rem 0}
   .footer{margin-top:0.2rem}
-
-  .header__inner{padding:.4rem .6rem}
-  .nav__menu a{font-size:1rem}
 }
