@@ -18,18 +18,15 @@
   // Menu movil
   var navMenu = document.getElementById('navMenu');
   var navToggle = document.querySelector('.nav__toggle');
-  var navCheck = document.getElementById('nav-check');
-
-  if (navToggle && navMenu && navCheck) {
+  if (navToggle && navMenu) {
     navToggle.addEventListener('click', function(e){
       e.stopPropagation();
       this.classList.toggle('active');
       navMenu.classList.toggle('open');
-      // El checkbox se maneja con el label, no necesitamos forzarlo
     });
   }
 
-  // Dropdowns en movil (toggle con flecha)
+  // Dropdowns en movil
   if (navMenu) {
     navMenu.querySelectorAll('.dropdown').forEach(function(dd){
       var link = dd.querySelector('a:first-child');
@@ -41,16 +38,6 @@
           }
         });
       }
-    });
-
-    // Cerrar el menú al hacer clic en cualquier enlace que no sea de dropdown
-    navMenu.querySelectorAll('a').forEach(function(link) {
-      link.addEventListener('click', function(e) {
-        // Si es un enlace normal (no el activador de un dropdown) cerramos el menú
-        if (!link.closest('.dropdown') || link !== link.parentElement.querySelector('a:first-child')) {
-          if (navCheck) navCheck.checked = false;
-        }
-      });
     });
   }
 
