@@ -17,43 +17,9 @@
     });
   }
 
-  // Elementos del menú
-  var navMenu = document.getElementById('navMenu');
-  var navToggle = document.querySelector('.nav__toggle');
+  // Header sticky y botón volver arriba (umbral 50%)
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
-
-  // Abrir/cerrar el menú principal al hacer clic en el botón hamburguesa
-  if (navToggle && navMenu) {
-    navToggle.addEventListener('click', function(e){
-      e.stopPropagation();
-      this.classList.toggle('active');
-      navMenu.classList.toggle('open');
-    });
-  }
-
-  // Manejo de dropdowns en móvil: un solo toque abre/cierra (alterna)
-  if (navMenu) {
-    navMenu.querySelectorAll('.dropdown > a').forEach(function(link){
-      link.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768) {
-          e.preventDefault();
-          var parentDropdown = this.parentNode;
-          parentDropdown.classList.toggle('open');
-        }
-      });
-    });
-  }
-
-  // Cerrar el menú principal solo si se hace clic fuera de él (opcional, pero no cierra submenús)
-  document.addEventListener('click', function(e) {
-    if (window.innerWidth <= 768 && navMenu && navMenu.contains(e.target) === false && navToggle && navToggle.contains(e.target) === false) {
-      navMenu.classList.remove('open');
-      if (navToggle) navToggle.classList.remove('active');
-    }
-  });
-
-  // Header sticky y botón volver arriba (umbral 50%)
   window.addEventListener('scroll', function() {
     if (window.scrollY > 80) header.classList.add('scrolled');
     else header.classList.remove('scrolled');
@@ -80,7 +46,8 @@
     if (notice && authorSpan && editor && formSrc) {
       authorSpan.textContent = 'Respondiendo a ' + author;
       notice.classList.add('show');
-      editor.src = formSrc + '&parentID=' + commentId;
+      // Reemplazamos el '&' por '&amp;' para evitar errores en el XML
+      editor.src = formSrc + '&amp;parentID=' + commentId;
       editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
