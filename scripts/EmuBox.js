@@ -23,7 +23,7 @@
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
 
-  // Alternar menú principal al hacer clic en el botón hamburguesa
+  // Abrir/cerrar el menú principal al hacer clic en el botón hamburguesa
   if (navToggle && navMenu) {
     navToggle.addEventListener('click', function(e){
       e.stopPropagation();
@@ -32,7 +32,7 @@
     });
   }
 
-  // Manejo de dropdowns en móvil: un solo toque para abrir/cerrar, sin cerrar otros
+  // Manejo de dropdowns en móvil: un solo toque para abrir/cerrar el submenú (sin cerrar otros)
   if (navMenu) {
     var dropdowns = navMenu.querySelectorAll('.dropdown');
     dropdowns.forEach(function(dd){
@@ -40,22 +40,28 @@
       if (link) {
         link.addEventListener('click', function(e) {
           if (window.innerWidth <= 768) {
-            e.preventDefault();
-            // Alternar la clase 'open' solo en este dropdown
-            dd.classList.toggle('open');
+            e.preventDefault();         // Evita que el enlace navegue
+            dd.classList.toggle('open'); // Abre o cierra SOLO este submenú
           }
         });
       }
     });
   }
 
-  // Cerrar el menú principal si se hace clic fuera de él (en móvil)
-  document.addEventListener('click', function(e) {
-    if (window.innerWidth <= 768 && navMenu && navMenu.contains(e.target) === false && navToggle && navToggle.contains(e.target) === false) {
-      navMenu.classList.remove('open');
-      if (navToggle) navToggle.classList.remove('active');
-    }
-  });
+  // Opcional: cerrar el menú principal al hacer clic en un enlace (mejor UX)
+  if (navMenu) {
+    navMenu.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768 && !link.closest('.dropdown')?.classList.contains('open')) {
+          // Si el enlace no es parte de un submenú abierto, cerramos el menú principal
+          setTimeout(function(){
+            navMenu.classList.remove('open');
+            if (navToggle) navToggle.classList.remove('active');
+          }, 150);
+        }
+      });
+    });
+  }
 
   // Header sticky y botón volver arriba (umbral 50%)
   window.addEventListener('scroll', function() {
