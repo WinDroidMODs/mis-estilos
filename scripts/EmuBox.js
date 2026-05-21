@@ -32,36 +32,26 @@
     });
   }
 
-  // Manejo de dropdowns en móvil: un solo toque para abrir/cerrar el submenú (sin cerrar otros)
+  // Manejo de dropdowns en móvil: un solo toque abre/cierra (alterna)
   if (navMenu) {
-    var dropdowns = navMenu.querySelectorAll('.dropdown');
-    dropdowns.forEach(function(dd){
-      var link = dd.querySelector('a:first-child');
-      if (link) {
-        link.addEventListener('click', function(e) {
-          if (window.innerWidth <= 768) {
-            e.preventDefault();         // Evita que el enlace navegue
-            dd.classList.toggle('open'); // Abre o cierra SOLO este submenú
-          }
-        });
-      }
-    });
-  }
-
-  // Opcional: cerrar el menú principal al hacer clic en un enlace (mejor UX)
-  if (navMenu) {
-    navMenu.querySelectorAll('a').forEach(function(link){
+    navMenu.querySelectorAll('.dropdown > a').forEach(function(link){
       link.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768 && !link.closest('.dropdown')?.classList.contains('open')) {
-          // Si el enlace no es parte de un submenú abierto, cerramos el menú principal
-          setTimeout(function(){
-            navMenu.classList.remove('open');
-            if (navToggle) navToggle.classList.remove('active');
-          }, 150);
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          var parentDropdown = this.parentNode;
+          parentDropdown.classList.toggle('open');
         }
       });
     });
   }
+
+  // Cerrar el menú principal solo si se hace clic fuera de él (opcional, pero no cierra submenús)
+  document.addEventListener('click', function(e) {
+    if (window.innerWidth <= 768 && navMenu && navMenu.contains(e.target) === false && navToggle && navToggle.contains(e.target) === false) {
+      navMenu.classList.remove('open');
+      if (navToggle) navToggle.classList.remove('active');
+    }
+  });
 
   // Header sticky y botón volver arriba (umbral 50%)
   window.addEventListener('scroll', function() {
