@@ -15,69 +15,61 @@
     });
   }
 
-  // Menú móvil (control directo)
-  var navCheck = document.getElementById('nav-check');
+  // Menu movil
   var navMenu = document.getElementById('navMenu');
   var navToggle = document.querySelector('.nav__toggle');
-
-  function openMenu() {
-    if (navCheck) navCheck.checked = true;
-    document.body.style.overflow = 'hidden';
-  }
-  function closeMenu() {
-    if (navCheck) navCheck.checked = false;
-    document.body.style.overflow = '';
-    document.querySelectorAll('.dropdown.open').forEach(function(d){ d.classList.remove('open'); });
-  }
+  var navCheck = document.getElementById('nav-check');
 
   if (navToggle && navMenu && navCheck) {
-    navToggle.addEventListener('click', function(e) {
+    navToggle.addEventListener('click', function(e){
       e.stopPropagation();
-      if (navCheck.checked) { closeMenu(); } else { openMenu(); }
+      this.classList.toggle('active');
+      navMenu.classList.toggle('open');
+      // El checkbox se maneja con el label, no necesitamos forzarlo
     });
+  }
 
-    var overlay = document.querySelector('.menu-overlay');
-    if (overlay) {
-      overlay.addEventListener('click', function() { closeMenu(); });
-    }
-
-    navMenu.querySelectorAll('a').forEach(function(link) {
-      link.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768) {
-          if (link.parentElement.classList.contains('dropdown') && link === link.parentElement.children[0]) {
-            return;
-          }
-          closeMenu();
-        }
-      });
-    });
-
+  // Dropdowns en movil (toggle con flecha)
+  if (navMenu) {
     navMenu.querySelectorAll('.dropdown').forEach(function(dd){
-      var toggleLink = dd.querySelector('a:first-child');
-      if (toggleLink) {
-        toggleLink.addEventListener('click', function(e) {
+      var link = dd.querySelector('a:first-child');
+      if (link) {
+        link.addEventListener('click', function(e) {
           if (window.innerWidth <= 768) {
             e.preventDefault();
-            e.stopPropagation();
             dd.classList.toggle('open');
           }
         });
       }
     });
+
+    // Cerrar el menú al hacer clic en cualquier enlace que no sea de dropdown
+    navMenu.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        // Si es un enlace normal (no el activador de un dropdown) cerramos el menú
+        if (!link.closest('.dropdown') || link !== link.parentElement.querySelector('a:first-child')) {
+          if (navCheck) navCheck.checked = false;
+        }
+      });
+    });
   }
 
-  // Header sticky y back-to-top
+  // Header sticky y boton volver arriba (aparece al 50% del scroll)
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
   window.addEventListener('scroll', function() {
     if (window.scrollY > 80) header.classList.add('scrolled');
     else header.classList.remove('scrolled');
+    // Umbral cambiado al 50% (0.5)
     var umbralScroll = document.documentElement.scrollHeight * 0.5;
     if (window.scrollY > umbralScroll) backToTop.classList.add('show');
     else backToTop.classList.remove('show');
   });
+
   if (backToTop) {
-    backToTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+    backToTop.addEventListener('click', function(){
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
   }
 
   // Responder a comentario
@@ -88,6 +80,7 @@
     var authorSpan = document.getElementById('reply-author-name');
     var editor = document.getElementById('comment-editor');
     var formSrc = document.getElementById('comment-editor-src') ? document.getElementById('comment-editor-src').href : null;
+
     if (notice && authorSpan && editor && formSrc) {
       authorSpan.textContent = 'Respondiendo a ' + author;
       notice.classList.add('show');
@@ -95,10 +88,13 @@
       editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
+
+  // Cancelar respuesta
   window.cancelReply = function() {
     var notice = document.getElementById('reply-notice');
     var editor = document.getElementById('comment-editor');
     var formSrc = document.getElementById('comment-editor-src') ? document.getElementById('comment-editor-src').href : null;
+
     if (notice && editor && formSrc) {
       notice.classList.remove('show');
       editor.src = formSrc;
