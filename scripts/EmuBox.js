@@ -17,12 +17,13 @@
     });
   }
 
-  // Menú móvil: cerrar submenús con un solo toque y cerrar al tocar fuera
+  // Elementos del menú
   var navMenu = document.getElementById('navMenu');
   var navToggle = document.querySelector('.nav__toggle');
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
 
+  // Alternar menú principal al hacer clic en el botón hamburguesa
   if (navToggle && navMenu) {
     navToggle.addEventListener('click', function(e){
       e.stopPropagation();
@@ -31,41 +32,28 @@
     });
   }
 
-  function closeAllDropdowns() {
-    if (navMenu) {
-      var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
-      openDropdowns.forEach(function(dd) {
-        dd.classList.remove('open');
-      });
-    }
-  }
-
+  // Manejo de dropdowns en móvil: un solo toque para abrir/cerrar, sin cerrar otros
   if (navMenu) {
-    navMenu.querySelectorAll('.dropdown').forEach(function(dd){
+    var dropdowns = navMenu.querySelectorAll('.dropdown');
+    dropdowns.forEach(function(dd){
       var link = dd.querySelector('a:first-child');
       if (link) {
         link.addEventListener('click', function(e) {
           if (window.innerWidth <= 768) {
             e.preventDefault();
-            if (dd.classList.contains('open')) {
-              dd.classList.remove('open');
-            } else {
-              closeAllDropdowns();
-              dd.classList.add('open');
-            }
+            // Alternar la clase 'open' solo en este dropdown
+            dd.classList.toggle('open');
           }
         });
       }
     });
   }
 
+  // Cerrar el menú principal si se hace clic fuera de él (en móvil)
   document.addEventListener('click', function(e) {
-    if (window.innerWidth <= 768 && navMenu && navMenu.contains(e.target) === false) {
-      closeAllDropdowns();
-      if (navMenu.classList.contains('open')) {
-        navMenu.classList.remove('open');
-        if (navToggle) navToggle.classList.remove('active');
-      }
+    if (window.innerWidth <= 768 && navMenu && navMenu.contains(e.target) === false && navToggle && navToggle.contains(e.target) === false) {
+      navMenu.classList.remove('open');
+      if (navToggle) navToggle.classList.remove('active');
     }
   });
 
