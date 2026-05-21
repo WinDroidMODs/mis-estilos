@@ -285,7 +285,7 @@
   flex-wrap: wrap;
 }
 .reply-notice.show { display: flex; }
-.reply-notice.i { font-size: 1rem; }
+.reply-notice i { font-size: 1rem; }
 
 .cancel-reply-btn {
   display: inline-flex;
@@ -455,7 +455,6 @@ a, button, .post-card, .pagination a, .share-buttons a, .tag-cloud a, .popular-p
   #back-to-top{bottom:15px;right:15px;width:40px;height:40px;font-size:1.2rem}
   .post-comments { padding: 1rem; }
   .comment-avatar { width: 45px; height: 45px; }
-  /* Permitir scroll en el menú hamburguesa */
   .nav__menu {
     max-height: 70vh;
     overflow-y: auto;
