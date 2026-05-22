@@ -447,9 +447,8 @@ a, button, .post-card, .pagination a, .share-buttons a, .tag-cloud a, .popular-p
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* ============================================================
-   NUEVO MENÚ HAMBURGUESA (Off-Canvas)
+   NUEVO MENÚ HAMBURGUESA (OFF-CANVAS)
    ============================================================ */
-
 /* Overlay (fondo oscuro) */
 .menu-overlay {
   position: fixed;
@@ -457,7 +456,7 @@ a, button, .post-card, .pagination a, .share-buttons a, .tag-cloud a, .popular-p
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(5px);
   z-index: 998;
   opacity: 0;
@@ -469,7 +468,7 @@ a, button, .post-card, .pagination a, .share-buttons a, .tag-cloud a, .popular-p
   visibility: visible;
 }
 
-/* Botón hamburguesa (se mantiene igual, solo cambiamos el estilo si quieres) */
+/* Botón hamburguesa (estilo mejorado) */
 .nav__toggle {
   display: flex;
   flex-direction: column;
@@ -485,7 +484,6 @@ a, button, .post-card, .pagination a, .share-buttons a, .tag-cloud a, .popular-p
   border-radius: 3px;
   transition: all 0.3s ease;
 }
-/* Animación a "X" cuando el menú está abierto */
 body.menu-open .nav__toggle span:nth-child(1) {
   transform: rotate(45deg) translate(5px, 5px);
 }
@@ -500,15 +498,15 @@ body.menu-open .nav__toggle span:nth-child(3) {
 .hamburger-menu {
   position: fixed;
   top: 0;
-  left: -280px;
-  width: 280px;
+  left: -300px;
+  width: 300px;
   max-width: 85%;
   height: 100%;
   background: #111118;
   z-index: 999;
   padding: 1.5rem 1rem;
-  transition: left 0.3s ease;
-  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.5);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -573,13 +571,13 @@ body.menu-open .nav__toggle span:nth-child(3) {
 }
 .hamburger-menu .submenu {
   list-style: none;
-  padding-left: 1.5rem;
+  padding-left: 1rem;
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s ease;
 }
 .hamburger-menu .nav-item.open .submenu {
-  max-height: 500px; /* Suficiente para submenús largos */
+  max-height: 500px;
 }
 .hamburger-menu .submenu a {
   display: block;
@@ -588,26 +586,37 @@ body.menu-open .nav__toggle span:nth-child(3) {
   text-decoration: none;
   border-radius: 6px;
   font-size: 0.9rem;
+  transition: all 0.2s;
 }
 .hamburger-menu .submenu a:hover {
   background: rgba(56, 142, 60, 0.15);
   color: #fff;
+  padding-left: 1.2rem;
 }
 .hamburger-menu .menu-footer {
   margin-top: auto;
-  padding-top: 1rem;
+  padding-top: 1.5rem;
   text-align: center;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: #6c757d;
+  border-top: 1px solid #1e1e2e;
 }
 
-/* Ajustes responsive: en escritorio no se muestra el menú lateral */
+/* Ocultar el menú lateral en escritorio */
 @media (min-width: 769px) {
   .hamburger-menu,
   .menu-overlay {
     display: none;
   }
+}
+
+/* Ajustes responsive para móvil */
+@media (max-width: 768px) {
   .nav__toggle {
+    display: flex;
+  }
+  /* Asegurar que el menú principal antiguo no interfiera */
+  .nav__menu:not(.hamburger-menu) {
     display: none !important;
   }
 }
