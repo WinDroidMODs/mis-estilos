@@ -17,58 +17,11 @@
     });
   }
 
-  // Elementos del nuevo menú off-canvas
-  var navToggle = document.querySelector('.nav__toggle');
-  var overlay = document.querySelector('.menu-overlay');
-  var sideMenu = document.querySelector('.hamburger-menu');
-  var closeBtn = document.querySelector('.hamburger-menu .close-btn');
-
-  function openMenu() {
-    document.body.classList.add('menu-open');
-    if (overlay) overlay.classList.add('active');
-    if (sideMenu) sideMenu.classList.add('open');
-  }
-
-  function closeMenu() {
-    document.body.classList.remove('menu-open');
-    if (overlay) overlay.classList.remove('active');
-    if (sideMenu) sideMenu.classList.remove('open');
-  }
-
-  if (navToggle) {
-    navToggle.addEventListener('click', function(e) {
-      e.stopPropagation();
-      if (sideMenu && sideMenu.classList.contains('open')) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
-    });
-  }
-
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closeMenu);
-  }
-
-  if (overlay) {
-    overlay.addEventListener('click', closeMenu);
-  }
-
-  // Manejo de submenús dentro del menú lateral
-  var navItems = document.querySelectorAll('.hamburger-menu .nav-item');
-  navItems.forEach(function(item) {
-    var link = item.querySelector('> a');
-    if (link && item.querySelector('.submenu')) {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        item.classList.toggle('open');
-      });
-    }
-  });
-
-  // Header sticky y botón volver arriba (umbral 50%)
+  // Elementos del menú (el script principal ya está dentro de la plantilla, esto es solo para respaldo)
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
+
+  // Header sticky y botón volver arriba (umbral 50%)
   window.addEventListener('scroll', function() {
     if (window.scrollY > 80) header.classList.add('scrolled');
     else header.classList.remove('scrolled');
@@ -83,7 +36,7 @@
     });
   }
 
-  // Responder a comentario (si usas comentarios)
+  // Responder a comentario
   window.replyToComment = function(button) {
     var commentId = button.getAttribute('data-comment-id');
     var author = button.getAttribute('data-comment-author');
