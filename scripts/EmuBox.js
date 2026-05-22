@@ -1,4 +1,4 @@
-/* EmuBox.js v1.0 | Autor: Robinson Avila | By: WinDroidMODs */
+/* EmuBox.js v1.0 - Menú off-canvas | Autor: Robinson Avila | By: WinDroidMODs */
 
 (function(){
   'use strict';
@@ -17,63 +17,62 @@
     });
   }
 
-  // Elementos del menú
-  var navMenu = document.getElementById('navMenu');
-  var navToggle = document.querySelector('.nav__toggle');
-  var header = document.getElementById('header');
-  var backToTop = document.getElementById('back-to-top');
+  // Elementos del nuevo menú off-canvas
+  var menuToggle = document.querySelector('.nav__toggle');
+  var overlay = document.querySelector('.menu-overlay');
+  var sideMenu = document.querySelector('.hamburger-menu');
+  var closeBtn = document.querySelector('.hamburger-menu .close-btn');
 
-  // Alternar menú principal al hacer clic en el botón hamburguesa
-  if (navToggle && navMenu) {
-    navToggle.addEventListener('click', function(e){
+  // Funciones para abrir/cerrar el menú
+  function openMenu() {
+    document.body.classList.add('menu-open');
+    if (overlay) overlay.classList.add('active');
+    if (sideMenu) sideMenu.classList.add('open');
+  }
+
+  function closeMenu() {
+    document.body.classList.remove('menu-open');
+    if (overlay) overlay.classList.remove('active');
+    if (sideMenu) sideMenu.classList.remove('open');
+  }
+
+  // Abrir al hacer clic en el botón hamburguesa
+  if (menuToggle) {
+    menuToggle.addEventListener('click', function(e) {
       e.stopPropagation();
-      this.classList.toggle('active');
-      navMenu.classList.toggle('open');
-    });
-  }
-
-  // Manejo de submenús en móvil: un solo toque abre/cierra (alterna)
-  function initMobileSubmenus() {
-    if (!navMenu) return;
-    var dropdowns = navMenu.querySelectorAll('.dropdown');
-    dropdowns.forEach(function(dd){
-      var link = dd.querySelector('> a');
-      if (!link) return;
-      link.removeEventListener('click', handleClick);
-      link.addEventListener('click', handleClick);
-      function handleClick(e) {
-        if (window.innerWidth <= 768) {
-          e.preventDefault();
-          e.stopPropagation();
-          dd.classList.toggle('open');
-        }
+      if (sideMenu && sideMenu.classList.contains('open')) {
+        closeMenu();
+      } else {
+        openMenu();
       }
     });
   }
 
-  initMobileSubmenus();
-  window.addEventListener('resize', function() {
-    if (window.innerWidth > 768) {
-      if (navMenu) {
-        var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
-        openDropdowns.forEach(function(dd){
-          dd.classList.remove('open');
-        });
-      }
-    } else {
-      initMobileSubmenus();
-    }
-  });
+  // Cerrar con el botón X
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeMenu);
+  }
 
-  // Cerrar el menú principal si se hace clic fuera (solo el principal)
-  document.addEventListener('click', function(e) {
-    if (window.innerWidth <= 768 && navMenu && navToggle && !navMenu.contains(e.target) && !navToggle.contains(e.target)) {
-      navMenu.classList.remove('open');
-      if (navToggle) navToggle.classList.remove('active');
+  // Cerrar al hacer clic en el overlay
+  if (overlay) {
+    overlay.addEventListener('click', closeMenu);
+  }
+
+  // Manejo de submenús: un solo toque abre/cierra el submenú (sin cerrar el menú principal)
+  var navItems = document.querySelectorAll('.hamburger-menu .nav-item');
+  navItems.forEach(function(item) {
+    var link = item.querySelector('> a');
+    if (link && item.querySelector('.submenu')) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        item.classList.toggle('open');
+      });
     }
   });
 
   // Header sticky y botón volver arriba (umbral 50%)
+  var header = document.getElementById('header');
+  var backToTop = document.getElementById('back-to-top');
   window.addEventListener('scroll', function() {
     if (window.scrollY > 80) header.classList.add('scrolled');
     else header.classList.remove('scrolled');
@@ -88,7 +87,7 @@
     });
   }
 
-  // Responder a comentario
+  // Responder a comentario (si se usa)
   window.replyToComment = function(button) {
     var commentId = button.getAttribute('data-comment-id');
     var author = button.getAttribute('data-comment-author');
