@@ -23,7 +23,7 @@
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
 
-  // Abrir/cerrar el menú principal al hacer clic en el botón hamburguesa
+  // Alternar menú principal al hacer clic en el botón hamburguesa
   if (navToggle && navMenu) {
     navToggle.addEventListener('click', function(e){
       e.stopPropagation();
@@ -32,32 +32,34 @@
     });
   }
 
-  // Manejo de submenús en móvil: un solo toque abre/cierra (alterna), sin cerrar otros
-  function initMobileDropdowns() {
+  // MÓVIL: Comportamiento exacto de whale.js para submenús
+  // - Un toque sobre el enlace con submenú previene el evento y alterna la clase 'open'
+  // - No se cierra al tocar fuera
+  function initMobileSubmenus() {
     if (!navMenu) return;
     var dropdowns = navMenu.querySelectorAll('.dropdown');
     dropdowns.forEach(function(dd){
       var link = dd.querySelector('a:first-child');
       if (!link) return;
-      // Eliminar eventos antiguos para evitar duplicados
-      link.removeEventListener('click', toggleDropdown);
-      link.addEventListener('click', toggleDropdown);
-      function toggleDropdown(e) {
+      // Eliminar evento anterior para evitar duplicados
+      link.removeEventListener('click', handleClick);
+      link.addEventListener('click', handleClick);
+      function handleClick(e) {
         if (window.innerWidth <= 768) {
           e.preventDefault();
           e.stopPropagation();
-          // Alternar la clase 'open' solo en este dropdown
+          // Alterna la clase 'open' SOLO en este dropdown
           dd.classList.toggle('open');
         }
       }
     });
   }
 
-  // Inicializar y también reinicializar cuando cambie el tamaño de la ventana
-  initMobileDropdowns();
+  // Inicializar y también reinicializar al cambiar el tamaño
+  initMobileSubmenus();
   window.addEventListener('resize', function() {
-    // Si la pantalla es mayor a 768px, aseguramos que no queden submenús abiertos
     if (window.innerWidth > 768) {
+      // Al pasar a escritorio, cerramos todos los submenús abiertos
       if (navMenu) {
         var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
         openDropdowns.forEach(function(dd){
@@ -65,18 +67,31 @@
         });
       }
     } else {
-      // En móvil, solo aseguramos que los eventos estén configurados
-      initMobileDropdowns();
+      initMobileSubmenus();
     }
   });
 
-  // Opcional: cerrar el menú principal si se hace clic fuera (solo el menú principal, no los submenús)
-  document.addEventListener('click', function(e) {
-    if (window.innerWidth <= 768 && navMenu && navToggle && !navMenu.contains(e.target) && !navToggle.contains(e.target)) {
-      navMenu.classList.remove('open');
-      if (navToggle) navToggle.classList.remove('active');
-    }
-  });
+  // Cerrar el menú principal al hacer clic en un enlace (solo si no tiene submenú abierto)
+  // Esto mejora la experiencia: al tocar un enlace que no es submenú, se cierra el menú principal.
+  if (navMenu) {
+    navMenu.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768) {
+          // Si el enlace pertenece a un dropdown y ese dropdown está abierto, no cerramos el menú principal
+          var parentDropdown = link.closest('.dropdown');
+          if (parentDropdown && parentDropdown.classList.contains('open')) {
+            // No hacemos nada, permitimos que el submenú se cierre con su propio evento
+            return;
+          }
+          // Para enlaces normales (sin submenú o con submenú cerrado), cerramos el menú principal
+          setTimeout(function(){
+            navMenu.classList.remove('open');
+            if (navToggle) navToggle.classList.remove('active');
+          }, 100);
+        }
+      });
+    });
+  }
 
   // Header sticky y botón volver arriba (umbral 50%)
   window.addEventListener('scroll', function() {
