@@ -1,6 +1,6 @@
-/* EmuBox.js v1.0 | Autor: Robinson Avila | By: WinDroidMODs */
+/* EmuBox.js v2.0 - Nuevo menú lateral profesional */
 
-(function(){
+(function() {
   'use strict';
 
   // Cookie banner
@@ -17,63 +17,46 @@
     });
   }
 
-  // Elementos del menú
-  var navMenu = document.getElementById('navMenu');
-  var navToggle = document.querySelector('.nav__toggle');
+  // Elementos del nuevo menú
+  var hamburger = document.getElementById('hamburger');
+  var mobileMenu = document.getElementById('mobileMenu');
+  var menuOverlay = document.getElementById('menuOverlay');
+  var closeMenu = document.getElementById('closeMenu');
+  var body = document.body;
+
+  function openMenu() {
+    mobileMenu.classList.add('active');
+    menuOverlay.classList.add('active');
+    hamburger.classList.add('active');
+    body.style.overflow = 'hidden';
+  }
+
+  function closeMenuFn() {
+    mobileMenu.classList.remove('active');
+    menuOverlay.classList.remove('active');
+    hamburger.classList.remove('active');
+    body.style.overflow = '';
+  }
+
+  if (hamburger) hamburger.addEventListener('click', openMenu);
+  if (closeMenu) closeMenu.addEventListener('click', closeMenuFn);
+  if (menuOverlay) menuOverlay.addEventListener('click', closeMenuFn);
+
+  // Submenús dentro del menú lateral (un toque abre/cierra)
+  var dropdowns = document.querySelectorAll('#mobileMenu .dropdown');
+  dropdowns.forEach(function(dd) {
+    var link = dd.querySelector('> a');
+    if (link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        dd.classList.toggle('open');
+      });
+    }
+  });
+
+  // Header sticky y botón volver arriba
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
-
-  // Alternar menú principal al hacer clic en el botón hamburguesa
-  if (navToggle && navMenu) {
-    navToggle.addEventListener('click', function(e){
-      e.stopPropagation();
-      this.classList.toggle('active');
-      navMenu.classList.toggle('open');
-    });
-  }
-
-  // Manejo de submenús en móvil: un solo toque abre/cierra (alterna)
-  function initMobileSubmenus() {
-    if (!navMenu) return;
-    var dropdowns = navMenu.querySelectorAll('.dropdown');
-    dropdowns.forEach(function(dd){
-      var link = dd.querySelector('> a');
-      if (!link) return;
-      link.removeEventListener('click', handleClick);
-      link.addEventListener('click', handleClick);
-      function handleClick(e) {
-        if (window.innerWidth <= 768) {
-          e.preventDefault();
-          e.stopPropagation();
-          dd.classList.toggle('open');
-        }
-      }
-    });
-  }
-
-  initMobileSubmenus();
-  window.addEventListener('resize', function() {
-    if (window.innerWidth > 768) {
-      if (navMenu) {
-        var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
-        openDropdowns.forEach(function(dd){
-          dd.classList.remove('open');
-        });
-      }
-    } else {
-      initMobileSubmenus();
-    }
-  });
-
-  // Cerrar el menú principal si se hace clic fuera (solo el principal)
-  document.addEventListener('click', function(e) {
-    if (window.innerWidth <= 768 && navMenu && navToggle && !navMenu.contains(e.target) && !navToggle.contains(e.target)) {
-      navMenu.classList.remove('open');
-      if (navToggle) navToggle.classList.remove('active');
-    }
-  });
-
-  // Header sticky y botón volver arriba (umbral 50%)
   window.addEventListener('scroll', function() {
     if (window.scrollY > 80) header.classList.add('scrolled');
     else header.classList.remove('scrolled');
@@ -81,14 +64,13 @@
     if (window.scrollY > umbralScroll) backToTop.classList.add('show');
     else backToTop.classList.remove('show');
   });
-
   if (backToTop) {
     backToTop.addEventListener('click', function(){
       window.scrollTo({top:0, behavior:'smooth'});
     });
   }
 
-  // Responder a comentario
+  // Responder comentarios (igual que antes)
   window.replyToComment = function(button) {
     var commentId = button.getAttribute('data-comment-id');
     var author = button.getAttribute('data-comment-author');
@@ -96,7 +78,6 @@
     var authorSpan = document.getElementById('reply-author-name');
     var editor = document.getElementById('comment-editor');
     var formSrc = document.getElementById('comment-editor-src') ? document.getElementById('comment-editor-src').href : null;
-
     if (notice && authorSpan && editor && formSrc) {
       authorSpan.textContent = 'Respondiendo a ' + author;
       notice.classList.add('show');
@@ -104,16 +85,13 @@
       editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
-
   window.cancelReply = function() {
     var notice = document.getElementById('reply-notice');
     var editor = document.getElementById('comment-editor');
     var formSrc = document.getElementById('comment-editor-src') ? document.getElementById('comment-editor-src').href : null;
-
     if (notice && editor && formSrc) {
       notice.classList.remove('show');
       editor.src = formSrc;
     }
   };
-
 })();
