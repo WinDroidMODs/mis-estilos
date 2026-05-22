@@ -1,4 +1,4 @@
-/* EmuBox.js v1.0 - Menú off-canvas | Autor: Robinson Avila | By: WinDroidMODs */
+/* EmuBox.js v1.0 | Autor: Robinson Avila | By: WinDroidMODs */
 
 (function(){
   'use strict';
@@ -18,12 +18,11 @@
   }
 
   // Elementos del nuevo menú off-canvas
-  var menuToggle = document.querySelector('.nav__toggle');
+  var navToggle = document.querySelector('.nav__toggle');
   var overlay = document.querySelector('.menu-overlay');
   var sideMenu = document.querySelector('.hamburger-menu');
   var closeBtn = document.querySelector('.hamburger-menu .close-btn');
 
-  // Funciones para abrir/cerrar el menú
   function openMenu() {
     document.body.classList.add('menu-open');
     if (overlay) overlay.classList.add('active');
@@ -36,9 +35,8 @@
     if (sideMenu) sideMenu.classList.remove('open');
   }
 
-  // Abrir al hacer clic en el botón hamburguesa
-  if (menuToggle) {
-    menuToggle.addEventListener('click', function(e) {
+  if (navToggle) {
+    navToggle.addEventListener('click', function(e) {
       e.stopPropagation();
       if (sideMenu && sideMenu.classList.contains('open')) {
         closeMenu();
@@ -48,17 +46,15 @@
     });
   }
 
-  // Cerrar con el botón X
   if (closeBtn) {
     closeBtn.addEventListener('click', closeMenu);
   }
 
-  // Cerrar al hacer clic en el overlay
   if (overlay) {
     overlay.addEventListener('click', closeMenu);
   }
 
-  // Manejo de submenús: un solo toque abre/cierra el submenú (sin cerrar el menú principal)
+  // Manejo de submenús dentro del menú lateral
   var navItems = document.querySelectorAll('.hamburger-menu .nav-item');
   navItems.forEach(function(item) {
     var link = item.querySelector('> a');
@@ -87,7 +83,7 @@
     });
   }
 
-  // Responder a comentario (si se usa)
+  // Responder a comentario (si usas comentarios)
   window.replyToComment = function(button) {
     var commentId = button.getAttribute('data-comment-id');
     var author = button.getAttribute('data-comment-author');
