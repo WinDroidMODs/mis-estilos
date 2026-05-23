@@ -582,35 +582,37 @@ a, button, .post-card, .pagination a, .share-buttons a, .tag-cloud a, .popular-p
   }
 }
 
-/* Ajuste para escritorio grande (≥1200px): barra más fina */
-@media (min-width: 1200px) {
+/* Ajuste para tablets (769px - 1199px): barra más gruesa */
+@media (min-width: 769px) and (max-width: 1199px) {
   .header__inner {
-    padding: 0.3rem 0 !important;
-  }
-  .logo__text {
-    font-size: 1rem !important;
-  }
-  .logo::before {
-    font-size: 1.1rem !important;
-  }
-  .header__search input {
-    height: 28px !important;
-    font-size: 0.75rem !important;
-    width: 140px !important;
-  }
-  .header__search button {
-    width: 26px !important;
-    height: 26px !important;
-  }
-  .nav__menu a {
-    padding: 0.2rem 0.7rem !important;
-    font-size: 0.75rem !important;
+    padding: 1.2rem 0 !important;
   }
 }
 
-/* Tablets (769px a 1199px) se mantiene el tamaño original, sin reducción */
-@media (min-width: 769px) and (max-width: 1199px) {
-  /* No se aplican cambios, todo queda como está por defecto */
+/* Ajuste para escritorio grande (≥1200px): barra más gruesa que antes (pero no tanto como en tablet) */
+@media (min-width: 1200px) {
+  .header__inner {
+    padding: 0.7rem 0 !important;
+  }
+  .logo__text {
+    font-size: 1.15rem !important;
+  }
+  .logo::before {
+    font-size: 1.2rem !important;
+  }
+  .header__search input {
+    height: 32px !important;
+    font-size: 0.8rem !important;
+    width: 150px !important;
+  }
+  .header__search button {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  .nav__menu a {
+    padding: 0.3rem 0.8rem !important;
+    font-size: 0.8rem !important;
+  }
 }
 
 @media (max-width:480px){
