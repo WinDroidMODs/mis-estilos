@@ -332,25 +332,25 @@
 .pagination a:hover{background:var(--accent);border-color:var(--accent);color:#fff;transform:translateY(-2px);box-shadow:0 6px 12px rgba(0,0,0,.3)}
 
 /* ============================================================
-   BOTON VOLVER ARRIBA (verde traslúcido)
+   BOTON VOLVER ARRIBA (verde más transparente)
    ============================================================ */
 #back-to-top {
   position:fixed;bottom:20px;right:20px;z-index:999;width:44px;height:44px;
   border-radius:50%;
-  background:rgba(56,142,60,0.85);
+  background:rgba(56,142,60,0.5); /* 50% de opacidad */
   color:#fff;
-  border:1px solid rgba(56,142,60,0.5);
+  border:1px solid rgba(56,142,60,0.3);
   font-size:1.4rem;
   display:flex;align-items:center;justify-content:center;cursor:pointer;
   opacity:0;visibility:hidden;
   transition:opacity .3s,visibility .3s,transform .3s,background .2s,border-color .2s;
   transform:translateY(20px);
-  box-shadow:0 4px 15px rgba(0,0,0,.3);
+  box-shadow:0 4px 15px rgba(0,0,0,.2);
   backdrop-filter:blur(2px);
 }
 #back-to-top.show{opacity:1;visibility:visible;transform:translateY(0)}
 #back-to-top:hover{
-  background:rgba(46,125,50,0.95);
+  background:rgba(46,125,50,0.7);
   border-color:#2E7D32;
   transform:scale(1.05);
 }
