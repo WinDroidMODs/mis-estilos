@@ -23,7 +23,7 @@
   window.addEventListener('scroll', function() {
     if (window.scrollY > 80) header.classList.add('scrolled');
     else header.classList.remove('scrolled');
-    var umbralScroll = document.documentElement.scrollHeight * 0.4; // Cambiado de 0.5 a 0.4
+    var umbralScroll = document.documentElement.scrollHeight * 0.4;
     if (window.scrollY > umbralScroll) backToTop.classList.add('show');
     else backToTop.classList.remove('show');
   });
