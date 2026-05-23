@@ -582,8 +582,8 @@ a, button, .post-card, .pagination a, .share-buttons a, .tag-cloud a, .popular-p
   }
 }
 
-/* Ajuste para escritorio: barra sticky más fina */
-@media (min-width: 992px) {
+/* Ajuste para escritorio grande (≥1200px): barra más fina */
+@media (min-width: 1200px) {
   .header__inner {
     padding: 0.3rem 0 !important;
   }
@@ -606,6 +606,11 @@ a, button, .post-card, .pagination a, .share-buttons a, .tag-cloud a, .popular-p
     padding: 0.2rem 0.7rem !important;
     font-size: 0.75rem !important;
   }
+}
+
+/* Tablets (769px a 1199px) se mantiene el tamaño original, sin reducción */
+@media (min-width: 769px) and (max-width: 1199px) {
+  /* No se aplican cambios, todo queda como está por defecto */
 }
 
 @media (max-width:480px){
