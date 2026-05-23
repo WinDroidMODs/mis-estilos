@@ -447,7 +447,7 @@ a, button, .post-card, .pagination a, .share-buttons a, .tag-cloud a, .popular-p
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* ============================================================
-   MEDIA QUERIES (incluye scroll en menú móvil) - ESTILOS DEL MENÚ HAMBURGUESA IGUAL A MINERMODS
+   MEDIA QUERIES (incluye scroll en menú móvil)
    ============================================================ */
 @media (max-width:768px){
   .article{padding:1.2rem}.article__title{font-size:1.5rem}
