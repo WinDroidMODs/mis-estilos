@@ -17,73 +17,9 @@
     });
   }
 
-  // Elementos del menú
-  var navMenu = document.getElementById('navMenu');
-  var navToggle = document.querySelector('.nav__toggle');
+  // Header sticky y botón volver arriba (umbral 50%)
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
-
-  // Alternar menú principal al hacer clic en el botón hamburguesa
-  if (navToggle && navMenu) {
-    navToggle.addEventListener('click', function(e){
-      e.stopPropagation();
-      this.classList.toggle('active');
-      navMenu.classList.toggle('open');
-    });
-  }
-
-  // MÓVIL: Comportamiento de submenús (un toque abre/cierra, sin cerrar al tocar fuera)
-  function initMobileSubmenus() {
-    if (!navMenu) return;
-    var dropdowns = navMenu.querySelectorAll('.dropdown');
-    dropdowns.forEach(function(dd){
-      var link = dd.querySelector('a:first-child');
-      if (!link) return;
-      link.removeEventListener('click', handleClick);
-      link.addEventListener('click', handleClick);
-      function handleClick(e) {
-        if (window.innerWidth <= 768) {
-          e.preventDefault();
-          e.stopPropagation();
-          dd.classList.toggle('open');
-        }
-      }
-    });
-  }
-
-  initMobileSubmenus();
-  window.addEventListener('resize', function() {
-    if (window.innerWidth > 768) {
-      if (navMenu) {
-        var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
-        openDropdowns.forEach(function(dd){
-          dd.classList.remove('open');
-        });
-      }
-    } else {
-      initMobileSubmenus();
-    }
-  });
-
-  // Cerrar el menú principal al hacer clic en un enlace (solo si no tiene submenú abierto)
-  if (navMenu) {
-    navMenu.querySelectorAll('a').forEach(function(link){
-      link.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768) {
-          var parentDropdown = link.closest('.dropdown');
-          if (parentDropdown && parentDropdown.classList.contains('open')) {
-            return;
-          }
-          setTimeout(function(){
-            navMenu.classList.remove('open');
-            if (navToggle) navToggle.classList.remove('active');
-          }, 100);
-        }
-      });
-    });
-  }
-
-  // Header sticky y botón volver arriba (umbral 50%)
   window.addEventListener('scroll', function() {
     if (window.scrollY > 80) header.classList.add('scrolled');
     else header.classList.remove('scrolled');
