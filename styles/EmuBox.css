@@ -1,6 +1,24 @@
 /* EmuBox.css v1.0 | Autor: Robinson Avila | By: WinDroidMODs */
 
 /* ============================================================
+   ANIMACIONES GLOBALES
+   ============================================================ */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero content aparece un poco más rápido */
+.hero__content {
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* ============================================================
    TARJETAS
    ============================================================ */
 .posts-grid{
@@ -21,14 +39,6 @@
   display:flex;flex-direction:column;
   position:relative;
   z-index:1;
-  /* Animación al aparecer: más profesional, con escala y easing personalizado */
-  opacity:0;
-  transform:translateY(25px) scale(0.98);
-  transition:opacity 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-}
-.post-card.visible{
-  opacity:1;
-  transform:translateY(0) scale(1);
 }
 .post-card:hover{
   transform:translateY(-6px);
