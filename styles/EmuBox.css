@@ -1,10 +1,8 @@
 /* EmuBox.css v1.1 | Autor: Robinson Avila | By: WinDroidMODs */
 
 /* ============================================================
-   VARIABLES (se sobrescriben desde el :root inline)
+   VARIABLES (se sobrescriben desde el :root inline de la plantilla)
    ============================================================ */
-/* Las variables reales se definen en el <style> de la plantilla.
-   Estos son los valores por defecto. */
 :root {
   --bg-color: #0a0a0f;
   --card-bg: #13131d;
