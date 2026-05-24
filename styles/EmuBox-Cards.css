@@ -22,12 +22,16 @@
   }
 }
 
+/* Tarjeta como enlace (ocupa todo el espacio) */
 .post-card {
   background: rgba(56, 142, 60, 0.15);
   border-radius: 20px;
   overflow: hidden;
   transition: none;
   border: none;
+  text-decoration: none !important;
+  display: block;
+  color: inherit;
 }
 .post-card:hover {
   transform: none;
@@ -56,6 +60,7 @@
   transform: none;
 }
 
+/* Overlay del icono de descarga (solo visual, no captura clics) */
 .post-card__img .img-overlay {
   position: absolute;
   top: 0;
@@ -69,6 +74,7 @@
   opacity: 0;
   transition: opacity 0.3s ease;
   border-radius: 20px;
+  pointer-events: none; /* Permite que el clic pase al enlace padre */
 }
 .post-card:hover .img-overlay {
   opacity: 1;
@@ -83,8 +89,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
 
+/* Etiqueta superpuesta (siempre visible) */
 .post-card__featured-tag {
   position: absolute;
   top: 12px;
@@ -99,7 +107,7 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   z-index: 2;
-  pointer-events: none;
+  pointer-events: none; /* No interfiere con el clic en la tarjeta */
 }
 
 .post-card__body {
@@ -114,6 +122,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: #f5f5f5;
 }
 @media (max-width: 768px) {
   .post-card__title {
@@ -125,13 +134,10 @@
     font-size: 0.85rem;
   }
 }
-.post-card__title a {
-  color: #f5f5f5;
-  text-decoration: none;
-}
-.post-card__title a:hover {
+.post-card__title:hover {
   color: #388E3C;
 }
+
 .post-card__version {
   font-size: 0.75rem;
   color: #aaa;
@@ -170,7 +176,7 @@
   box-shadow: 0 0 4px rgba(255, 215, 0, 0.5), inset 0 0 4px rgba(255, 255, 255, 0.8);
 }
 
-/* Ocultar elementos antiguos que ya no se usan */
+/* Ocultar elementos antiguos ya no usados */
 .post-card__tags, .post-card__meta, .post-card__snippet {
   display: none;
 }
