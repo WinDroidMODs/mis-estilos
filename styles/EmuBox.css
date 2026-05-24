@@ -26,12 +26,11 @@
 
 .post-card {
   background: rgba(56, 142, 60, 0.15);
-  border-radius: 16px;
+  border-radius: 20px; /* Esquinas redondeadas de la tarjeta */
   overflow: hidden;
   transition: none;
   border: none;
 }
-/* Sin efecto hover en la tarjeta */
 .post-card:hover {
   transform: none;
 }
@@ -44,18 +43,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 15px; /* Separación de 15px del borde */
-  border-radius: 12px; /* Esquina redondeada, no círculo */
+  padding: 10px; /* Separación de 10px del borde */
+  border-radius: 20px; /* Esquinas redondeadas de la imagen */
 }
 .post-card__img img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
-  transition: none; /* Sin escala al hover */
-  border-radius: 12px;
+  transition: none;
+  border-radius: 20px;
 }
-/* Sin escala al hover */
 .post-card:hover .post-card__img img {
   transform: none;
 }
@@ -72,7 +70,7 @@
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s ease;
-  border-radius: 12px;
+  border-radius: 20px;
 }
 .post-card:hover .img-overlay {
   opacity: 1;
@@ -108,7 +106,7 @@
 }
 
 .post-card__body {
-  padding: 0 15px 15px 15px; /* Separación de bordes para el contenido */
+  padding: 0 10px 10px 10px; /* Separación de 10px para título y contenido */
   text-align: center;
 }
 .post-card__title {
@@ -116,12 +114,10 @@
   font-weight: 700;
   margin-bottom: 0.5rem;
   line-height: 1.3;
-  /* Forzar una sola línea con puntos suspensivos */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* Tamaño de fuente responsivo para el título */
 @media (max-width: 768px) {
   .post-card__title {
     font-size: 0.9rem;
@@ -183,7 +179,7 @@
 }
 
 /* ============================================================
-   SIDEBAR (sin cambios)
+   SIDEBAR
    ============================================================ */
 .widget {
   background: #13131d;
