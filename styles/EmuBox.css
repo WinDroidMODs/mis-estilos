@@ -43,8 +43,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
-  border-radius: 12px;
+  padding: 8px; /* Mayor separación del borde */
+  border-radius: 8px; /* Radio más pequeño, no totalmente redondo */
 }
 .post-card__img img {
   width: 100%;
@@ -52,7 +52,7 @@
   object-fit: contain;
   display: block;
   transition: transform 0.3s ease;
-  border-radius: 12px;
+  border-radius: 8px;
 }
 .post-card:hover .post-card__img img {
   transform: scale(1.02);
@@ -70,7 +70,7 @@
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s ease;
-  border-radius: 12px;
+  border-radius: 8px;
 }
 .post-card:hover .img-overlay {
   opacity: 1;
