@@ -1,7 +1,7 @@
 /* EmuBox.css v1.0 | Autor: Robinson Avila | By: WinDroidMODs */
 
 /* ============================================================
-   TARJETAS (compactas, sin hover, título una línea)
+   TARJETAS (compactas, sin hover, título una línea, bordes 20px)
    ============================================================ */
 .posts-grid {
   display: grid;
@@ -26,7 +26,7 @@
 
 .post-card {
   background: rgba(56, 142, 60, 0.15);
-  border-radius: 20px; /* Esquinas redondeadas de la tarjeta */
+  border-radius: 20px;
   overflow: hidden;
   transition: none;
   border: none;
@@ -43,8 +43,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px; /* Separación de 10px del borde */
-  border-radius: 20px; /* Esquinas redondeadas de la imagen */
+  padding: 10px;
+  border-radius: 20px;
 }
 .post-card__img img {
   width: 100%;
@@ -87,7 +87,6 @@
   justify-content: center;
 }
 
-/* Etiqueta superpuesta (primera etiqueta) - siempre visible */
 .post-card__featured-tag {
   position: absolute;
   top: 12px;
@@ -106,7 +105,7 @@
 }
 
 .post-card__body {
-  padding: 0 10px 10px 10px; /* Separación de 10px para título y contenido */
+  padding: 0 10px 10px 10px;
   text-align: center;
 }
 .post-card__title {
@@ -173,7 +172,6 @@
   box-shadow: 0 0 4px rgba(255, 215, 0, 0.5), inset 0 0 4px rgba(255, 255, 255, 0.8);
 }
 
-/* Ocultar elementos antiguos */
 .post-card__tags, .post-card__meta, .post-card__snippet {
   display: none;
 }
@@ -625,7 +623,7 @@
 }
 
 /* ============================================================
-   BOTON VOLVER ARRIBA (verde semitransparente original)
+   BOTON VOLVER ARRIBA
    ============================================================ */
 #back-to-top {
   position: fixed;
@@ -817,7 +815,6 @@ a, button, .post-card, .pagination a, .share-buttons a, .tag-cloud a, .popular-p
     max-height: 70vh;
     overflow-y: auto;
   }
-  /* Estilos del menú hamburguesa (móvil) */
   .header__inner {
     position: relative;
   }
@@ -939,14 +936,12 @@ a, button, .post-card, .pagination a, .share-buttons a, .tag-cloud a, .popular-p
   }
 }
 
-/* Ajuste para tablets (769px - 1199px): barra más gruesa */
 @media (min-width: 769px) and (max-width: 1199px) {
   .header__inner {
     padding: 1.3rem 0 !important;
   }
 }
 
-/* Ajuste para escritorio grande (≥1200px): barra intermedia */
 @media (min-width: 1200px) {
   .header__inner {
     padding: 0.7rem 0 !important;
