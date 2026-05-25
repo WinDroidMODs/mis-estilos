@@ -1,4 +1,4 @@
-/* emu.css v1.1 | Autor: Robinson Avila | By: WinDroidMODs */
+/* tarjeta.css v1.1 | Autor: Robinson Avila | By: WinDroidMODs */
 /* Estilos exclusivos para las tarjetas de entrada */
 
 .posts-grid {
@@ -24,9 +24,9 @@
 
 /* Tarjeta como enlace (ocupa todo el espacio) */
 .post-card {
-  position: relative; /* ← NUEVO: para que la etiqueta y el overlay se posicionen dentro */
+  position: relative; /* ← necesario para la etiqueta y el overlay */
   background: rgba(56, 142, 60, 0.15);
-  border-radius: 30px; /* ← CAMBIADO: de 20px a 30px */
+  border-radius: 30px;
   overflow: hidden;
   transition: none;
   border: none;
@@ -39,7 +39,7 @@
 }
 
 .post-card__img {
-  position: relative; /* ← NUEVO: para que el overlay se posicione correctamente */
+  position: relative; /* ← necesario para el overlay */
   aspect-ratio: 1 / 1;
   width: 100%;
   background: transparent;
@@ -47,7 +47,7 @@
   align-items: center;
   justify-content: center;
   padding: 10px;
-  border-radius: 30px; /* ← CAMBIADO: de 20px a 30px */
+  border-radius: 30px;
 }
 .post-card__img img {
   width: 100%;
@@ -55,13 +55,13 @@
   object-fit: contain;
   display: block;
   transition: none;
-  border-radius: 30px; /* ← CAMBIADO: de 20px a 30px */
+  border-radius: 30px;
 }
 .post-card:hover .post-card__img img {
   transform: none;
 }
 
-/* Overlay del icono de descarga - ahora respeta el padding y el border-radius */
+/* Overlay del icono de descarga */
 .post-card__img .img-overlay {
   position: absolute;
   top: 10px;
@@ -74,8 +74,8 @@
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s ease;
-  border-radius: 30px; /* ← CAMBIADO: de 20px a 30px para que coincida con la imagen */
-  pointer-events: none; /* Permite que el clic pase al enlace padre */
+  border-radius: 30px;
+  pointer-events: none;
 }
 .post-card:hover .img-overlay {
   opacity: 1;
@@ -93,7 +93,7 @@
   pointer-events: none;
 }
 
-/* Etiqueta superpuesta (siempre visible) */
+/* Etiqueta superpuesta (primera etiqueta) */
 .post-card__featured-tag {
   position: absolute;
   top: 12px;
@@ -101,14 +101,14 @@
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(4px);
   padding: 4px 10px;
-  border-radius: 30px; /* ← CAMBIADO: de 20px a 30px para unificar el estilo redondeado */
+  border-radius: 30px;
   font-size: 0.7rem;
   font-weight: 600;
   color: #fff;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   z-index: 2;
-  pointer-events: none; /* No interfiere con el clic en la tarjeta */
+  pointer-events: none;
 }
 
 .post-card__body {
@@ -153,31 +153,34 @@
   color: #9e9e9e;
   margin-bottom: 0.5rem;
 }
+
+/* Estrellas de valoración */
 .rating-stars {
   display: flex;
   justify-content: center;
   gap: 0.2rem;
 }
+
+/* Estrella base (forma, sombra y tamaño) */
 .rating-star {
   width: 16px;
   height: 16px;
   display: inline-block;
   clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-}
-.rating-star.full {
-  background: radial-gradient(circle at 30% 30%, #fff8c5 0%, #ffd700 40%, #ffa500 100%);
-  box-shadow: 0 0 4px rgba(255, 215, 0, 0.5), inset 0 0 4px rgba(255, 255, 255, 0.8);
-}
-.rating-star.empty {
-  background: #e0e0e0;
-  opacity: 0.6;
-}
-.rating-star.half {
-  background: linear-gradient(90deg, #ffd700 50%, #e0e0e0 50%);
   box-shadow: 0 0 4px rgba(255, 215, 0, 0.5), inset 0 0 4px rgba(255, 255, 255, 0.8);
 }
 
-/* Ocultar elementos antiguos ya no usados */
+/* Estrella completamente llena */
+.rating-star.full {
+  background: radial-gradient(circle at 30% 30%, #fff8c5 0%, #ffd700 40%, #ffa500 100%);
+}
+
+/* Estrella vacía */
+.rating-star.empty {
+  background: #e0e0e0;
+}
+
+/* Ocultar elementos antiguos */
 .post-card__tags, .post-card__meta, .post-card__snippet {
   display: none;
 }
