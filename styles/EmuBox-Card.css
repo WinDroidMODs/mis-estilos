@@ -1,4 +1,4 @@
-/* tarjeta.css v1.1 | Autor: Robinson Avila | By: WinDroidMODs */
+/* tarjet.css v1.1 | Autor: Robinson Avila | By: WinDroidMODs */
 /* Estilos exclusivos para las tarjetas de entrada */
 
 .posts-grid {
@@ -24,9 +24,9 @@
 
 /* Tarjeta como enlace (ocupa todo el espacio) */
 .post-card {
-  position: relative; /* ← necesario para la etiqueta y el overlay */
+  position: relative; /* necesario para la etiqueta y el overlay */
   background: rgba(56, 142, 60, 0.15);
-  border-radius: 30px;
+  border-radius: 30px;  /* ← se mantiene en 30px */
   overflow: hidden;
   transition: none;
   border: none;
@@ -39,7 +39,7 @@
 }
 
 .post-card__img {
-  position: relative; /* ← necesario para el overlay */
+  position: relative; /* necesario para el overlay */
   aspect-ratio: 1 / 1;
   width: 100%;
   background: transparent;
@@ -47,7 +47,7 @@
   align-items: center;
   justify-content: center;
   padding: 10px;
-  border-radius: 30px;
+  border-radius: 40px;  /* ← cambiado a 40px */
 }
 .post-card__img img {
   width: 100%;
@@ -55,7 +55,7 @@
   object-fit: contain;
   display: block;
   transition: none;
-  border-radius: 30px;
+  border-radius: 40px;  /* ← cambiado a 40px */
 }
 .post-card:hover .post-card__img img {
   transform: none;
@@ -74,7 +74,7 @@
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s ease;
-  border-radius: 30px;
+  border-radius: 40px;  /* ← cambiado a 40px para coincidir con la imagen */
   pointer-events: none;
 }
 .post-card:hover .img-overlay {
@@ -101,7 +101,7 @@
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(4px);
   padding: 4px 10px;
-  border-radius: 30px;
+  border-radius: 30px;  /* se mantiene en 30px para combinar con la tarjeta */
   font-size: 0.7rem;
   font-weight: 600;
   color: #fff;
