@@ -1,16 +1,28 @@
-/* tarjet.css v1.1 | Autor: Robinson Avila | By: WinDroidMODs */
+/* tarjet.css v2.0 | Autor: Robinson Avila | By: WinDroidMODs */
 /* Estilos exclusivos para las tarjetas de entrada */
 
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr);  /* Móvil por defecto: 2 tarjetas */
   gap: 1.5rem;
 }
-@media (min-width: 768px) {
+
+/* Tablet (600px a 899px): 3 tarjetas */
+@media (min-width: 600px) and (max-width: 899px) {
+  .posts-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;  /* opcional: un poco más juntas */
+  }
+}
+
+/* Escritorio (≥ 900px): 4 tarjetas */
+@media (min-width: 900px) {
   .posts-grid {
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+/* Ajustes de espaciado en pantallas muy pequeñas */
 @media (max-width: 767px) {
   .posts-grid {
     gap: 1rem;
