@@ -1,4 +1,4 @@
-/* EmuBox-v2.3-General.css
+/* EmuBox-v2.4-General.css
    Autor: Robinson Avila | By: WinDroidMODs
    Estilos generales (sidebar, comentarios, footer, menú, botón Telegram, etc.)
 */
@@ -981,13 +981,13 @@ html { scrollbar-color: var(--accent) var(--bg-color); scrollbar-width: thin; }
 }
 
 /* ============================================================
-   BOTÓN FLOTANTE DE TELEGRAM (CORREGIDO)
+   BOTÓN FLOTANTE DE TELEGRAM (Z-INDEX CORREGIDO, DEBAJO DEL BANNER)
    ============================================================ */
 #telegram-floating-widget {
   position: fixed;
   bottom: 30px;
   left: 30px;
-  z-index: 100000 !important;
+  z-index: 9990 !important;
   isolation: isolate;
 }
 #telegram-floating-widget a {
