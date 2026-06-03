@@ -1,8 +1,11 @@
-/* EmuBox-General.css v2.0 - Unificado y optimizado */
+/* EmuBox-v2.1-General.css
+   Autor: Robinson Avila | By: WinDroidMODs
+   Estilos generales (sidebar, comentarios, footer, menú, etc.)
+*/
+
 /* ============================================================
    VARIABLES GLOBALES (definidas en :root desde la plantilla)
    ============================================================ */
-/* Se usan var(--accent), var(--bg-color), etc. */
 
 /* ============================================================
    RESET Y BASE
@@ -95,7 +98,7 @@ html { scrollbar-color: var(--accent) var(--bg-color); scrollbar-width: thin; }
 }
 
 /* ============================================================
-   HEADER (siempre semitransparente)
+   HEADER
    ============================================================ */
 .header {
   background: rgba(13,13,20,0.95);
