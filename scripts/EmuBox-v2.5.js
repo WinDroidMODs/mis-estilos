@@ -1,4 +1,4 @@
-/* EmuBox-v2.4.js
+/* EmuBox-v2.5.js
    Autor: Robinson Avila | By: WinDroidMODs
    JavaScript unificado (menú, rating, cookies con AdSense no personalizado, scroll, comentarios, Telegram)
 */
