@@ -1,4 +1,4 @@
-/* EmuBox-v2.2-Card.css
+/* EmuBox-v2.3-Card.css
    Autor: Robinson Avila | By: WinDroidMODs
    Estilos exclusivos para las tarjetas de entrada
 */
@@ -26,7 +26,6 @@
   .posts-grid { gap: 0.8rem; }
 }
 
-/* Tarjeta - SIN efecto de elevación */
 .post-card {
   position: relative;
   background: rgba(56, 142, 60, 0.15);
