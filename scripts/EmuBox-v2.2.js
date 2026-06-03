@@ -1,4 +1,4 @@
-/* EmuBox-v2.1.js
+/* EmuBox-v2.2.js
    Autor: Robinson Avila | By: WinDroidMODs
    JavaScript unificado (menú, rating, cookies con AdSense no personalizado, scroll, comentarios, Telegram)
 */
@@ -6,23 +6,19 @@
 (function(){
   'use strict';
 
-  // ============================================================
-  // 1. COOKIE BANNER CON CONTROL DE ANUNCIOS PERSONALIZADOS
-  // ============================================================
+  // Cookie banner y control de anuncios
   var cookieBanner = document.getElementById('cookie-banner');
   var hasConsent = localStorage.getItem('cookieConsent');
   var scriptsLoaded = false;
 
   function loadAdSense(nonPersonalized) {
     if (document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]')) return;
-    
     window.adsbygoogle = window.adsbygoogle || [];
     if (nonPersonalized) {
       window.adsbygoogle.requestNonPersonalizedAds = 1;
     } else {
       window.adsbygoogle.requestNonPersonalizedAds = 0;
     }
-    
     var adScript = document.createElement('script');
     adScript.async = true;
     adScript.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
@@ -43,7 +39,6 @@
   function loadScriptsByConsent(consent) {
     if (scriptsLoaded) return;
     scriptsLoaded = true;
-    
     if (consent === 'accepted') {
       loadAdSense(false);
       loadAnalytics();
@@ -70,9 +65,7 @@
     loadScriptsByConsent('rejected');
   }
 
-  // ============================================================
-  // 2. FUNCIÓN UNIFICADA DE PROCESAMIENTO DE RATING Y METADATOS
-  // ============================================================
+  // Procesamiento de rating y etiquetas
   window.processRatingStars = function(container) {
     var hiddenDiv = container.querySelector('.hidden-labels');
     if (!hiddenDiv) return;
@@ -163,9 +156,7 @@
     });
   };
 
-  // ============================================================
-  // 3. MENÚ HAMBURGUESA Y DROPDOWNS EN MÓVIL
-  // ============================================================
+  // Menú hamburguesa
   var navMenu = document.getElementById('navMenu');
   var navCheckbox = document.getElementById('nav-check');
   if (navMenu) {
@@ -178,7 +169,6 @@
       e.stopPropagation();
       dropdown.classList.toggle('open');
     }
-
     function initDropdowns() {
       var dropdownLinks = navMenu.querySelectorAll('.dropdown > a');
       dropdownLinks.forEach(function(link) {
@@ -186,7 +176,6 @@
         link.addEventListener('click', handleDropdownClick);
       });
     }
-
     initDropdowns();
     window.addEventListener('resize', function() {
       if (window.innerWidth > 768) {
@@ -212,9 +201,7 @@
     });
   }
 
-  // ============================================================
-  // 4. HEADER STICKY, BOTÓN VOLVER ARRIBA
-  // ============================================================
+  // Scroll: header sticky y back-to-top
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
   window.addEventListener('scroll', function() {
@@ -231,9 +218,7 @@
     });
   }
 
-  // ============================================================
-  // 5. FUNCIONES PARA COMENTARIOS (reply)
-  // ============================================================
+  // Comentarios reply
   window.replyToComment = function(button) {
     var commentId = button.getAttribute('data-comment-id');
     var author = button.getAttribute('data-comment-author');
@@ -258,9 +243,7 @@
     }
   };
 
-  // ============================================================
-  // 6. TOOLTIP PARA TELEGRAM
-  // ============================================================
+  // Tooltip Telegram
   var tgBtn = document.querySelector("#telegram-floating-widget a");
   var tgTooltip = document.querySelector("#telegram-floating-widget .tooltip");
   if (tgBtn && tgTooltip) {
@@ -291,9 +274,7 @@
     });
   }
 
-  // ============================================================
-  // 7. EJECUCIÓN INICIAL
-  // ============================================================
+  // Inicialización
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       window.processPostCards();
