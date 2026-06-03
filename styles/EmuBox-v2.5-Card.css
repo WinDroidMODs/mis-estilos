@@ -1,4 +1,4 @@
-/* EmuBox-v2.4-Card.css
+/* EmuBox-v2.5-Card.css
    Autor: Robinson Avila | By: WinDroidMODs
    Estilos exclusivos para las tarjetas de entrada
 */
@@ -134,18 +134,18 @@
   .post-card__title { font-size: 0.85rem; }
 }
 
-/* Estilo "píldora" para la versión/formato (restaurado) */
+/* Estilo "píldora" mejorado para versión/formato */
 .post-card__version {
   font-size: 0.7rem;
-  color: #aaa;
-  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(2px);
   display: inline-block;
-  padding: 0.2rem 0.7rem;
+  padding: 0.2rem 0.8rem;
   border-radius: 50px;
   margin-bottom: 0.4rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.3px;
-  backdrop-filter: blur(2px);
 }
 .post-card__date {
   font-size: 0.7rem;
