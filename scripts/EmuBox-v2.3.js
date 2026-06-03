@@ -1,4 +1,4 @@
-/* EmuBox-v2.2.js
+/* EmuBox-v2.3.js
    Autor: Robinson Avila | By: WinDroidMODs
    JavaScript unificado (menú, rating, cookies con AdSense no personalizado, scroll, comentarios, Telegram)
 */
@@ -6,7 +6,6 @@
 (function(){
   'use strict';
 
-  // Cookie banner y control de anuncios
   var cookieBanner = document.getElementById('cookie-banner');
   var hasConsent = localStorage.getItem('cookieConsent');
   var scriptsLoaded = false;
@@ -65,7 +64,6 @@
     loadScriptsByConsent('rejected');
   }
 
-  // Procesamiento de rating y etiquetas
   window.processRatingStars = function(container) {
     var hiddenDiv = container.querySelector('.hidden-labels');
     if (!hiddenDiv) return;
@@ -156,7 +154,6 @@
     });
   };
 
-  // Menú hamburguesa
   var navMenu = document.getElementById('navMenu');
   var navCheckbox = document.getElementById('nav-check');
   if (navMenu) {
@@ -201,7 +198,6 @@
     });
   }
 
-  // Scroll: header sticky y back-to-top
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
   window.addEventListener('scroll', function() {
@@ -218,7 +214,6 @@
     });
   }
 
-  // Comentarios reply
   window.replyToComment = function(button) {
     var commentId = button.getAttribute('data-comment-id');
     var author = button.getAttribute('data-comment-author');
@@ -243,7 +238,6 @@
     }
   };
 
-  // Tooltip Telegram
   var tgBtn = document.querySelector("#telegram-floating-widget a");
   var tgTooltip = document.querySelector("#telegram-floating-widget .tooltip");
   if (tgBtn && tgTooltip) {
@@ -274,7 +268,6 @@
     });
   }
 
-  // Inicialización
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       window.processPostCards();
