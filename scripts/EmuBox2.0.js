@@ -1,46 +1,21 @@
-/* EmuBox.js v2.0 | Autor: Robinson Avila | By: WinDroidMODs */
+/* EmuBox.js v1.0 MEJORADO | Autor: Robinson Avila | By: WinDroidMODs */
 
 (function(){
   'use strict';
 
-  // Función global para parsear etiquetas (formato, versión, rating)
-  window.parsePostLabels = function(labelsArray) {
-    var format = null, version = null, rating = null;
-    for (var i = 0; i < labelsArray.length; i++) {
-      var lbl = labelsArray[i].trim();
-      var lower = lbl.toLowerCase();
-      if (lower.match(/^w/)) {
-        format = lbl.substring(1);
-        break;
-      }
-    }
-    if (!format) {
-      for (var i = 0; i < labelsArray.length; i++) {
-        var lbl = labelsArray[i].trim();
-        if (lbl.toLowerCase().match(/^v\d+(\.\d+)*/)) {
-          version = lbl;
-          break;
-        }
-      }
-    }
-    for (var i = 0; i < labelsArray.length; i++) {
-      var lbl = labelsArray[i].trim();
-      var match = lbl.toLowerCase().match(/^z(\d+(?:\.\d+)?)/);
-      if (match) {
-        rating = parseFloat(match[1]);
-        break;
-      }
-    }
-    return { format: format, version: version, rating: rating };
-  };
-
-  // Cookie banner
+  // Cookie banner con manejo de scripts condicionales (mejora 20)
   var cookieBanner = document.getElementById('cookie-banner');
   if (cookieBanner && !localStorage.getItem('cookieConsent')) {
     cookieBanner.style.display = 'flex';
     document.getElementById('cookie-accept').addEventListener('click', function(){
       localStorage.setItem('cookieConsent', 'accepted');
       cookieBanner.style.display = 'none';
+      // Activar scripts de terceros dinámicamente
+      var ga = document.getElementById('ga-script');
+      var ads = document.getElementById('adsense-script');
+      if(ga) ga.style.display = 'block';
+      if(ads) ads.style.display = 'block';
+      if(typeof gtag === 'function') gtag('js', new Date());
     });
     document.getElementById('cookie-reject').addEventListener('click', function(){
       localStorage.setItem('cookieConsent', 'rejected');
@@ -48,13 +23,14 @@
     });
   }
 
-  // Header sticky y botón volver arriba (umbral 300px)
+  // Header sticky y botón volver arriba (umbral 40%)
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
   window.addEventListener('scroll', function() {
     if (window.scrollY > 80) header.classList.add('scrolled');
     else header.classList.remove('scrolled');
-    if (window.scrollY > 300) backToTop.classList.add('show');
+    var umbralScroll = document.documentElement.scrollHeight * 0.4;
+    if (window.scrollY > umbralScroll) backToTop.classList.add('show');
     else backToTop.classList.remove('show');
   });
 
@@ -64,7 +40,7 @@
     });
   }
 
-  // Responder a comentario
+  // Responder a comentario (mejora 11: ahora también limpia correctamente)
   window.replyToComment = function(button) {
     var commentId = button.getAttribute('data-comment-id');
     var author = button.getAttribute('data-comment-author');
@@ -89,6 +65,9 @@
     if (notice && editor && formSrc) {
       notice.classList.remove('show');
       editor.src = formSrc;
+      // Limpiar cualquier rastro de respuesta pendiente
+      var replyInput = document.querySelector('input[name="parentID"]');
+      if(replyInput) replyInput.remove();
     }
   };
 
