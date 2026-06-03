@@ -1,4 +1,8 @@
-/* EmuBox.js v2.1 - Con AdSense no personalizado en caso de rechazo */
+/* EmuBox-v2.1.js
+   Autor: Robinson Avila | By: WinDroidMODs
+   JavaScript unificado (menú, rating, cookies con AdSense no personalizado, scroll, comentarios, Telegram)
+*/
+
 (function(){
   'use strict';
 
@@ -12,12 +16,11 @@
   function loadAdSense(nonPersonalized) {
     if (document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]')) return;
     
-    // Establecer el modo de personalización ANTES de cargar el script
     window.adsbygoogle = window.adsbygoogle || [];
     if (nonPersonalized) {
       window.adsbygoogle.requestNonPersonalizedAds = 1;
     } else {
-      window.adsbygoogle.requestNonPersonalizedAds = 0; // opcional, por claridad
+      window.adsbygoogle.requestNonPersonalizedAds = 0;
     }
     
     var adScript = document.createElement('script');
@@ -42,13 +45,10 @@
     scriptsLoaded = true;
     
     if (consent === 'accepted') {
-      // Aceptó: anuncios personalizados + analytics
       loadAdSense(false);
       loadAnalytics();
     } else if (consent === 'rejected') {
-      // Rechazó: anuncios NO personalizados, sin analytics
       loadAdSense(true);
-      // No cargar analytics
     }
   }
 
@@ -81,7 +81,6 @@
     var version = null, format = null, rating = null;
     var firstLabel = labels.length > 0 ? labels[0] : null;
 
-    // Buscar formato (w)
     for (var i = 0; i < labels.length; i++) {
       var lbl = labels[i].toLowerCase();
       if (lbl.match(/^w/)) {
@@ -89,7 +88,6 @@
         break;
       }
     }
-    // Buscar versión (v)
     if (!format) {
       for (var i = 0; i < labels.length; i++) {
         var lbl = labels[i].toLowerCase();
@@ -99,7 +97,6 @@
         }
       }
     }
-    // Buscar rating (z)
     for (var i = 0; i < labels.length; i++) {
       var match = labels[i].toLowerCase().match(/^z(\d+(?:\.\d+)?)/);
       if (match) {
@@ -108,7 +105,6 @@
       }
     }
 
-    // Versión / formato
     var versionDiv = container.querySelector('.popular-post__version, .post-card__version');
     var versionSpan = container.querySelector('.version-value');
     if (versionDiv && versionSpan) {
@@ -125,7 +121,6 @@
       }
     }
 
-    // Estrellas
     var starsDiv = container.querySelector('.rating-stars');
     if (starsDiv && rating !== null && !isNaN(rating)) {
       var fullStars = Math.floor(rating);
@@ -147,7 +142,6 @@
       starsDiv.style.display = 'none';
     }
 
-    // Etiqueta superpuesta
     var tagDiv = container.querySelector('.post-card__featured-tag, .popular-post__featured-tag');
     if (tagDiv && firstLabel) {
       tagDiv.textContent = firstLabel;
@@ -157,18 +151,14 @@
     }
   };
 
-  // Procesar todas las tarjetas del grid principal
   window.processPostCards = function() {
-    var cards = document.querySelectorAll('.post-card');
-    cards.forEach(function(card) {
+    document.querySelectorAll('.post-card').forEach(function(card) {
       window.processRatingStars(card);
     });
   };
 
-  // Procesar el widget PopularPosts
   window.processPopularWidget = function() {
-    var popularLinks = document.querySelectorAll('.popular-post-link');
-    popularLinks.forEach(function(link) {
+    document.querySelectorAll('.popular-post-link').forEach(function(link) {
       window.processRatingStars(link);
     });
   };
@@ -200,8 +190,7 @@
     initDropdowns();
     window.addEventListener('resize', function() {
       if (window.innerWidth > 768) {
-        var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
-        openDropdowns.forEach(function(dd){ dd.classList.remove('open'); });
+        document.querySelectorAll('.dropdown.open').forEach(function(dd){ dd.classList.remove('open'); });
       } else {
         initDropdowns();
       }
@@ -209,13 +198,11 @@
     if (navCheckbox) {
       navCheckbox.addEventListener('change', function() {
         if (!this.checked) {
-          var openDropdowns = navMenu.querySelectorAll('.dropdown.open');
-          openDropdowns.forEach(function(dd){ dd.classList.remove('open'); });
+          document.querySelectorAll('.dropdown.open').forEach(function(dd){ dd.classList.remove('open'); });
         }
       });
     }
-    var allLinks = navMenu.querySelectorAll('a');
-    allLinks.forEach(function(link) {
+    navMenu.querySelectorAll('a').forEach(function(link) {
       link.addEventListener('click', function(e) {
         if (window.innerWidth <= 768) {
           if (link.closest('.dropdown')) return;
@@ -226,7 +213,7 @@
   }
 
   // ============================================================
-  // 4. HEADER STICKY, BOTÓN VOLVER ARRIBA (con umbral corregido)
+  // 4. HEADER STICKY, BOTÓN VOLVER ARRIBA
   // ============================================================
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
@@ -272,7 +259,7 @@
   };
 
   // ============================================================
-  // 6. TOOLTIP PARA TELEGRAM (con retraso)
+  // 6. TOOLTIP PARA TELEGRAM
   // ============================================================
   var tgBtn = document.querySelector("#telegram-floating-widget a");
   var tgTooltip = document.querySelector("#telegram-floating-widget .tooltip");
@@ -305,7 +292,7 @@
   }
 
   // ============================================================
-  // 7. EJECUCIÓN INICIAL DE PROCESAMIENTO DE TARJETAS
+  // 7. EJECUCIÓN INICIAL
   // ============================================================
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
