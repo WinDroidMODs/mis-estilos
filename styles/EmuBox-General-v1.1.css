@@ -757,3 +757,23 @@ body.light-theme .search-btn:hover {
 body.light-theme .nav__toggle span {
   background: #334155;
 }
+/* Corrección barra de búsqueda del héroe en tema claro */
+body.light-theme .hero__search input {
+  background: #ffffff;
+  border: 2px solid #cbd5e1;
+  border-right: none;
+  color: #1e293b;
+}
+body.light-theme .hero__search input::placeholder {
+  color: #94a3b8;
+}
+body.light-theme .hero__search input:focus {
+  border-color: #2e7d32;
+}
+body.light-theme .hero__search button {
+  background: #2e7d32;
+  color: #ffffff;
+}
+body.light-theme .hero__search button:hover {
+  background: #1b5e20;
+}
