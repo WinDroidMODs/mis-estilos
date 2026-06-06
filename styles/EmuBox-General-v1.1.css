@@ -1,4 +1,5 @@
 /* EmuBox-General-v1.1.css | Autor: Robinson Avila | By: WinDroidMODs */
+/* Versión mejorada para vista de escritorio en móviles */
 
 .widget {
   background: #13131d;
@@ -554,6 +555,59 @@ a, button, .post-card, .pagination a, .share-buttons a, .tag-cloud a, .popular-p
   white-space: nowrap;
   border: 0;
 }
+
+/* ========== MEJORAS PARA VISTA DE ESCRITORIO EN MÓVIL ========== */
+body {
+  overflow-x: hidden;
+}
+.container {
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+.header__inner {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.nav__menu {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem;
+}
+.nav__menu a {
+  white-space: normal;
+  padding: 0.3rem 0.8rem;
+}
+.posts-grid {
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+@media (max-width: 560px) {
+  .posts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.sidebar {
+  width: 100%;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.main {
+  flex-direction: column;
+}
+.main__blog {
+  width: 100%;
+}
+/* Ajuste para que las tarjetas no se estiren demasiado */
+.post-card__title {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* Fin mejoras */
+
 @media (max-width: 768px) {
   .article { padding: 1.2rem; }
   .article__title { font-size: 1.5rem; }
