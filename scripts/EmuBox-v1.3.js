@@ -1,4 +1,4 @@
-/* EmuBox-v1.1.js | Autor: Robinson Avila | By: WinDroidMODs */
+/* EmuBox-v1.3.js | Autor: Robinson Avila | By: WinDroidMODs */
 
 (function(){
   'use strict';
