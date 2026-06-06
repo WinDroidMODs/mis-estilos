@@ -1,4 +1,4 @@
-/* EmuBox-General-v1.1.css | Autor: Robinson Avila | By: WinDroidMODs */
+/* EmuBox-General-v1.3.css | Autor: Robinson Avila | By: WinDroidMODs */
 
 .widget {
   background: #13131d;
@@ -865,12 +865,29 @@ body.light-theme .comment-reply-button,
 body.light-theme .comment-replies-label {
   color: #2e7d32;
 }
+/* Corrección menú hamburguesa en tema claro */
+body.light-theme .nav__menu {
+  background: rgba(255, 255, 255, 0.98);
+  border-bottom-color: #e2e8f0;
+}
+body.light-theme .nav__menu a {
+  color: #1e293b;
+}
+body.light-theme .nav__menu .dropdown__menu {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+body.light-theme .nav__menu .dropdown__menu a {
+  background: #f8fafc;
+  color: #1e293b;
+}
+body.light-theme .nav__menu .dropdown__menu a:hover {
+  background: #2e7d32;
+  color: #ffffff;
+}
 @media (max-width: 768px) {
   body.light-theme .nav__menu {
-    background: rgba(255, 255, 255, 0.95);
-    border-bottom-color: #e2e8f0;
-  }
-  body.light-theme .nav__menu .dropdown__menu a {
-    background: rgba(241, 245, 249, 0.9);
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(12px);
   }
 }
