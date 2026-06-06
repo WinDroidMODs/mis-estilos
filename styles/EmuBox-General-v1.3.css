@@ -875,7 +875,7 @@ body.light-theme .nav__menu a {
 }
 body.light-theme .nav__menu .dropdown__menu {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #ffffff;
 }
 body.light-theme .nav__menu .dropdown__menu a {
   background: #f8fafc;
