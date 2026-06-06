@@ -1,5 +1,5 @@
-/* EmuBox-General-v1.1.css | Autor: Robinson Avila | By: WinDroidMODs */
-/* Versión mejorada para vista de escritorio en móviles */
+/* EmuBox-General-v1.2.css | Autor: Robinson Avila | By: WinDroidMODs */
+/* Versión mejorada para vista de escritorio en móviles y tema claro */
 
 .widget {
   background: #13131d;
@@ -598,7 +598,6 @@ body {
 .main__blog {
   width: 100%;
 }
-/* Ajuste para que las tarjetas no se estiren demasiado */
 .post-card__title {
   white-space: normal;
   display: -webkit-box;
@@ -927,4 +926,46 @@ body.light-theme .comment-replies-label {
   body.light-theme .nav__menu .dropdown__menu a {
     background: rgba(241, 245, 249, 0.9);
   }
+}
+
+/* Skeleton loader (estilos para cuando se inyecta dentro de .posts-grid) */
+.skeleton-card {
+  background: rgba(56, 142, 60, 0.1);
+  border-radius: 30px;
+  overflow: hidden;
+  animation: pulse 1.2s infinite ease-in-out;
+}
+.skeleton-img {
+  aspect-ratio: 1 / 1;
+  background: rgba(255,255,255,0.05);
+  border-radius: 40px;
+  margin: 10px;
+}
+.skeleton-text {
+  height: 16px;
+  background: rgba(255,255,255,0.08);
+  margin: 12px 10px 8px;
+  border-radius: 20px;
+}
+.skeleton-text-sm {
+  width: 60%;
+  height: 12px;
+  margin: 8px 10px;
+}
+.skeleton-text-xs {
+  width: 40%;
+  height: 10px;
+  margin: 8px 10px;
+}
+body.light-theme .skeleton-img {
+  background: rgba(0,0,0,0.05);
+}
+body.light-theme .skeleton-text,
+body.light-theme .skeleton-text-sm,
+body.light-theme .skeleton-text-xs {
+  background: rgba(0,0,0,0.06);
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }
