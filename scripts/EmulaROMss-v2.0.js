@@ -1,9 +1,8 @@
-/* EmuBox.js v1.0 | Autor: Robinson Avila | By: WinDroidMODs */
+/* EmulaROMss-v2.0.js | Autor: Robinson Avila | By: WinDroidMODs */
 
 (function(){
   'use strict';
 
-  // Cookie banner
   var cookieBanner = document.getElementById('cookie-banner');
   if (cookieBanner && !localStorage.getItem('cookieConsent')) {
     cookieBanner.style.display = 'flex';
@@ -17,7 +16,6 @@
     });
   }
 
-  // Header sticky y botón volver arriba (umbral 40%)
   var header = document.getElementById('header');
   var backToTop = document.getElementById('back-to-top');
   window.addEventListener('scroll', function() {
@@ -34,7 +32,6 @@
     });
   }
 
-  // Responder a comentario
   window.replyToComment = function(button) {
     var commentId = button.getAttribute('data-comment-id');
     var author = button.getAttribute('data-comment-author');
