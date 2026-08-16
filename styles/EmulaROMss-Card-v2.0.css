@@ -182,23 +182,3 @@
 .post-card__tags, .post-card__meta, .post-card__snippet {
   display: none;
 }
-body.light-theme .post-card,
-body.light-theme #related-posts-root .post-card,
-body.light-theme .apk-container .post-card {
-  background: rgba(46, 125, 50, 0.08);
-}
-body.light-theme .post-card__title,
-body.light-theme #related-posts-root .post-card__title,
-body.light-theme .apk-container .post-card__title {
-  color: #0f172a;
-}
-body.light-theme .post-card__version {
-  background: rgba(0, 0, 0, 0.05);
-  color: #475569;
-}
-body.light-theme .post-card__date {
-  color: #64748b;
-}
-body.light-theme .rating-star.empty {
-  background: #cbd5e1;
-}
