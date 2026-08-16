@@ -1,4 +1,4 @@
-/* RomsFull-v2.0.js | Autor: Robinson Avila | By: WinDroidMODs */
+/* RomsFull-2.0.js */
 
 (function(){
   'use strict';
